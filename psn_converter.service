@@ -1,0 +1,18 @@
+# /etc/systemd/system/psn_converter.service
+[Unit]
+Description=PSN to SACN/OSC Converter
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python3 /path/to/app.py
+WorkingDirectory=/path/to/
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+User=pi
+
+[Install]
+WantedBy=multi-user.target
+
+#sudo systemctl enable psn_converter.service
+#sudo systemctl start psn_converter.service

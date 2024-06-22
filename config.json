@@ -1,0 +1,53 @@
+{
+    "psn_ip": "0.0.0.0",
+    "psn_port": 56565,
+    "mappings": [
+        {
+            "psn_field": "position",
+            "sacn_universe": 1,
+            "sacn_address": 1,
+            "osc_ip": "127.0.0.1",
+            "osc_port": 8000,
+            "osc_address": "/tracker/position",
+            "scale": 1.0
+        },
+        {
+            "psn_field": "speed",
+            "sacn_universe": 1,
+            "sacn_address": 4,
+            "osc_ip": "127.0.0.1",
+            "osc_port": 8001,
+            "osc_address": "/tracker/speed",
+            "scale": 1.0
+        },
+        {
+            "psn_field": "orientation",
+            "sacn_universe": 1,
+            "sacn_address": 7,
+            "osc_ip": "127.0.0.1",
+            "osc_port": 8002,
+            "osc_address": "/tracker/orientation",
+            "scale": 1.0
+        }
+    ],
+    "network_interfaces": {
+        "eth0": {
+            "mode": "dhcp",
+            "static_ip": "",
+            "gateway": "",
+            "dns": ""
+        },
+        "wlan0": {
+            "mode": "static",
+            "static_ip": "192.168.1.50",
+            "gateway": "192.168.1.1",
+            "dns": "8.8.8.8"
+        }
+    },
+    "general_settings": {
+        "auto_start": true,
+        "psn_refresh_rate": 60,
+        "sacn_refresh_rate": 40,
+        "osc_refresh_rate": 40
+    }
+}
