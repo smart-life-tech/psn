@@ -1,45 +1,62 @@
-<!-- templates/index.html -->
-<!doctype html>
+<!DOCTYPE html>
 <html>
 <head>
-    <title>PSN to SACN/OSC Configurator</title>
+    <title>PSN to SACN/OSC Converter</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <h1>PSN to SACN/OSC Configurator</h1>
-    <form action="/configure" method="post">
-        <label for="psn_ip">PSN IP:</label>
-        <input type="text" id="psn_ip" name="psn_ip" value="{{ config['psn_ip'] }}"><br>
-        <label for="psn_port">PSN Port:</label>
-        <input type="number" id="psn_port" name="psn_port" value="{{ config['psn_port'] }}"><br>
+    <h1>PSN to SACN/OSC Converter</h1>
+
+    <h2>Configuration</h2>
+    <form id="configForm">
+        PSN IP: <input type="text" name="psn_ip" value="{{ config['psn_ip'] }}"><br>
+        PSN Port: <input type="text" name="psn_port" value="{{ config['psn_port'] }}"><br>
         <button type="submit">Save Configuration</button>
     </form>
+
     <h2>Add Mapping</h2>
-    <form action="/add_mapping" method="post">
-        <label for="psn_field">PSN Field:</label>
-        <select id="psn_field" name="psn_field">
-            <option value="position">Position</option>
-            <option value="speed">Speed</option>
-            <option value="orientation">Orientation</option>
-        </select><br>
-        <label for="sacn_universe">sACN Universe:</label>
-        <input type="number" id="sacn_universe" name="sacn_universe" value="1"><br>
-        <label for="sacn_address">sACN Address:</label>
-        <input type="number" id="sacn_address" name="sacn_address" value="1"><br>
-        <label for="osc_ip">OSC IP:</label>
-        <input type="text" id="osc_ip" name="osc_ip" value="127.0.0.1"><br>
-        <label for="osc_port">OSC Port:</label>
-        <input type="number" id="osc_port" name="osc_port" value="8000"><br>
-        <label for="osc_address">OSC Address:</label>
-        <input type="text" id="osc_address" name="osc_address" value="/tracker/position"><br>
-        <label for="scale">Scale:</label>
-        <input type="number" id="scale" name="scale" value="1.0" step="0.01"><br>
+    <form id="mappingForm">
+        PSN Field: <input type="text" name="psn_field"><br>
+        SACN Universe: <input type="text" name="sacn_universe"><br>
+        SACN Address: <input type="text" name="sacn_address"><br>
+        OSC IP: <input type="text" name="osc_ip"><br>
+        OSC Port: <input type="text" name="osc_port"><br>
+        OSC Address: <input type="text" name="osc_address"><br>
+        Scale: <input type="text" name="scale"><br>
         <button type="submit">Add Mapping</button>
     </form>
-    <form action="/start" method="post">
-        <button type="submit">Start</button>
-    </form>
-    <form action="/stop" method="post">
-        <button type="submit">Stop</button>
-    </form>
+
+    <button id="startButton">Start Conversion</button>
+    <button id="stopButton">Stop Conversion</button>
+
+    <script>
+        $(document).ready(function() {
+            $('#configForm').submit(function(event) {
+                event.preventDefault();
+                $.post('/configure', $(this).serialize(), function(response) {
+                    alert(response);
+                });
+            });
+
+            $('#mappingForm').submit(function(event) {
+                event.preventDefault();
+                $.post('/add_mapping', $(this).serialize(), function(response) {
+                    alert(response);
+                });
+            });
+
+            $('#startButton').click(function() {
+                $.post('/start', function(response) {
+                    alert(response);
+                });
+            });
+
+            $('#stopButton').click(function() {
+                $.post('/stop', function(response) {
+                    alert(response);
+                });
+            });
+        });
+    </script>
 </body>
 </html>

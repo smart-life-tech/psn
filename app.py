@@ -1,5 +1,5 @@
 # app.py
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, jsonify
 from psn_receiver import PSNReceiver
 from data_converter import DataConverter
 import json
@@ -50,7 +50,7 @@ def configure():
     config['psn_ip'] = request.form['psn_ip']
     config['psn_port'] = int(request.form['psn_port'])
     save_config(config)
-    return 'Configuration saved'
+    return jsonify('Configuration saved')
 
 @app.route('/add_mapping', methods=['POST'])
 def add_mapping():
@@ -74,7 +74,7 @@ def add_mapping():
         mapping['osc_address'],
         mapping['scale']
     )
-    return 'Mapping added'
+    return jsonify('Mapping added')
 
 @app.route('/start', methods=['POST'])
 def start():
@@ -88,12 +88,12 @@ def start():
             }
             data_converter.convert_data(psn_data)
     threading.Thread(target=run).start()
-    return 'Data conversion started'
+    return jsonify('Data conversion started')
 
 @app.route('/stop', methods=['POST'])
 def stop():
     data_converter.stop()
-    return 'Data conversion stopped'
+    return jsonify('Data conversion stopped')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
