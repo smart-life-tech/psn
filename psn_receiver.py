@@ -11,9 +11,12 @@ class PSNReceiver:
     
     def receive_data(self):
         data, _ = self.sock.recvfrom(1024)
-        # Example: Extracting position, speed, and orientation data
-        tracker_id = struct.unpack('!H', data[10:12])[0]
-        position_data = struct.unpack('!3f', data[20:32])  # X, Y, Z positions
-        speed_data = struct.unpack('!3f', data[32:44])  # X, Y, Z speeds
-        orientation_data = struct.unpack('!3f', data[44:56])  # Pitch, Yaw, Roll
+        tracker_id, pos_x, pos_y, pos_z = struct.unpack('!Ifff', data[:16])
+        speed_x, speed_y, speed_z = struct.unpack('!fff', data[16:28])
+        orient_x, orient_y, orient_z = struct.unpack('!fff', data[28:40])
+        
+        position_data = [pos_x, pos_y, pos_z]
+        speed_data = [speed_x, speed_y, speed_z]
+        orientation_data = [orient_x, orient_y, orient_z]
+        
         return tracker_id, position_data, speed_data, orientation_data

@@ -3,31 +3,34 @@
     "psn_port": 56565,
     "mappings": [
         {
-            "psn_field": "position",
+            "tracker_id": 1,
+            "data_type": "position",
+            "scale": 1.0,
             "sacn_universe": 1,
             "sacn_address": 1,
+            "osc_address": "/tracker/1/position",
             "osc_ip": "127.0.0.1",
-            "osc_port": 8000,
-            "osc_address": "/tracker/position",
-            "scale": 1.0
+            "osc_port": 8000
         },
         {
-            "psn_field": "speed",
+            "tracker_id": 1,
+            "data_type": "speed",
+            "scale": 1.0,
             "sacn_universe": 1,
-            "sacn_address": 4,
+            "sacn_address": 10,
+            "osc_address": "/tracker/1/speed",
             "osc_ip": "127.0.0.1",
-            "osc_port": 8001,
-            "osc_address": "/tracker/speed",
-            "scale": 1.0
+            "osc_port": 8000
         },
         {
-            "psn_field": "orientation",
+            "tracker_id": 1,
+            "data_type": "orientation",
+            "scale": 1.0,
             "sacn_universe": 1,
-            "sacn_address": 7,
+            "sacn_address": 20,
+            "osc_address": "/tracker/1/orientation",
             "osc_ip": "127.0.0.1",
-            "osc_port": 8002,
-            "osc_address": "/tracker/orientation",
-            "scale": 1.0
+            "osc_port": 8000
         }
     ],
     "network_interfaces": {
