@@ -4,7 +4,7 @@ import struct
 import sacn
 #from pythonosc.udp_client import SimpleUDPClient
 from osc4py3.as_eventloop import osc_udp_client, osc_send ,osc_terminate
-from osc4py3 import oscsender
+#from osc4py3 import oscsender
 from threading import Thread
 
 class DataConverter:
