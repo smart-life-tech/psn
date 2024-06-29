@@ -89,7 +89,7 @@ def start():
             }
             data_converter.convert_data(psn_data)
     threading.Thread(target=run).start()
-    return jsonify('Data conversion started')
+    return jsonify('Data conversion started now')
 
 @app.route('/stop', methods=['POST'])
 def stop():
