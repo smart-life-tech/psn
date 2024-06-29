@@ -1,64 +1,75 @@
-import sacn
-import time
 import json
-from osc4py3.as_eventloop import osc_send, osc_startup, osc_udp_client, osc_terminate
+import socket
+import struct
+import sacn
+#from pythonosc.udp_client import SimpleUDPClient
+from osc4py3.as_eventloop import osc_udp_client, osc_send ,osc_terminate
+from osc4py3 import oscsender
+from threading import Thread
 
 class DataConverter:
     def __init__(self, mappings_file):
         self.load_mappings(mappings_file)
-        self.sacn_sender = sacn.sACNsender(fps=30)
-        self.sacn_sender.start()
+        self.init_sacn_sender()
         self.init_osc_sender()
 
     def load_mappings(self, mappings_file):
-        with open(mappings_file, 'r') as file:
-            self.mappings = json.load(file)
+        with open(mappings_file, 'r') as f:
+            self.mappings = json.load(f)
 
-    def init_osc_sender(self):
-        osc_startup()
-        self.osc_clients = {}
-        for mapping in self.mappings['mappings']:
-            if 'osc_address' in mapping and mapping['osc_address'] not in self.osc_clients:
-                osc_ip = mapping.get('osc_ip', '127.0.0.1')
-                osc_port = mapping.get('osc_port', 8000)
-                self.osc_clients[mapping['osc_address']] = osc_udp_client(osc_ip, osc_port,mapping['osc_address'])
+    def init_sacn_sender(self):
+        self.sacn_sender = sacn.sACNsender()
+        self.sacn_sender.start()
 
-    def convert_data(self, psn_data):
-        print(psn_data)
-        tracker_id, position_data, speed_data, orientation_data = psn_data
-
-        for mapping in self.mappings['mappings']:
-            if mapping['tracker_id'] == tracker_id:
-                if mapping['data_type'] == 'position':
-                    data = position_data
-                elif mapping['data_type'] == 'speed':
-                    data = speed_data
-                elif mapping['data_type'] == 'orientation':
-                    data = orientation_data
-                else:
-                    continue
-
-                scaled_data = [x * mapping['scale'] for x in data]
-
-                if 'sacn_universe' in mapping and 'sacn_address' in mapping:
-                    self.convert_to_sacn(scaled_data, mapping['sacn_universe'], mapping['sacn_address'])
-
-                if 'osc_address' in mapping:
-                    self.convert_to_osc(scaled_data, mapping['osc_address'])
-
-    def convert_to_sacn(self, data, universe, address):
-        self.init_sacn_universe(universe)
-        self.sacn_sender[universe].dmx_data[address:address+len(data)] = data
-
-    def init_sacn_universe(self, universe):
-        if universe not in self.sacn_sender:
+        for mapping in self.mappings:
+            universe = mapping['sacn_universe']
             self.sacn_sender.activate_output(universe)
             self.sacn_sender[universe].multicast = True
 
-    def convert_to_osc(self, data, osc_address):
-        if osc_address in self.osc_clients:
-            osc_send(self.osc_clients[osc_address], osc_address, data)
+    def init_osc_sender(self):
+        self.osc_clients = {}
+        for mapping in self.mappings:
+            osc_ip = mapping['osc_ip']
+            osc_port = mapping['osc_port']
+            self.osc_clients[mapping['osc_address']] = osc_udp_client(osc_ip, osc_port, mapping['osc_address'])
 
-    def stop(self):
-        self.sacn_sender.stop()
+    def scale_data(self, data, scale):
+        return [x * scale for x in data]
+
+    def convert_to_sacn(self, data, universe, address):
+        self.sacn_sender[universe].dmx_data[address:address + len(data)] = data
+
+    def convert_to_osc(self, data, address):
+        osc_send(self.osc_clients[address], data)
+
+    def convert_data(self, psn_data):
+        tracker_id, position_data, speed_data, orientation_data = psn_data
+        for mapping in self.mappings:
+            if mapping['tracker_id'] == tracker_id:
+                if 'position' in mapping['psn_data_type']:
+                    scaled_data = self.scale_data(position_data, mapping['scale'])
+                    self.convert_to_sacn(scaled_data, mapping['sacn_universe'], mapping['sacn_address'])
+                    self.convert_to_osc(scaled_data, mapping['osc_address'])
+                elif 'speed' in mapping['psn_data_type']:
+                    scaled_data = self.scale_data(speed_data, mapping['scale'])
+                    self.convert_to_sacn(scaled_data, mapping['sacn_universe'], mapping['sacn_address'])
+                    self.convert_to_osc(scaled_data, mapping['osc_address'])
+                elif 'orientation' in mapping['psn_data_type']:
+                    scaled_data = self.scale_data(orientation_data, mapping['scale'])
+                    self.convert_to_sacn(scaled_data, mapping['sacn_universe'], mapping['sacn_address'])
+                    self.convert_to_osc(scaled_data, mapping['osc_address'])
+
+def run():
+    psn_data = (1, [47.8955, 0, 0], [0, 0, 0], [0, 0, 0])  # Sample data for testing
+    data_converter.convert_data(psn_data)
+
+if __name__ == "__main__":
+    CONFIG_FILE = "config.json"
+    data_converter = DataConverter(CONFIG_FILE)
+
+    try:
+        thread = Thread(target=run)
+        thread.start()
+    except KeyboardInterrupt:
         osc_terminate()
+        #sacn_sender.stop()
