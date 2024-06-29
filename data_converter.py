@@ -1,51 +1,49 @@
-import json
-from sacn import sACNsender
+import struct
+import sacn
 from pythonosc.udp_client import SimpleUDPClient
-
+import json
 class DataConverter:
-    def __init__(self, mappings):
-        self.mappings = mappings
-        self.sacn_sender = sACNsender()
-        self.sacn_sender.start()
+    def __init__(self, mappings_file):
+        self.sacn_sender = sacn.sACNsender()
         self.osc_clients = {}
+        self.load_mappings(mappings_file)
+        self.init_sacn_sender()
         self.init_osc_sender()
+
+    def load_mappings(self, mappings_file):
+        with open(mappings_file, 'r') as f:
+            self.mappings = json.load(f)
+
+    def init_sacn_sender(self):
+        for mapping in self.mappings:
+            universe = mapping['sacn_universe']
+            self.sacn_sender.activate_output(universe)
+            self.sacn_sender[universe].multicast = True
 
     def init_osc_sender(self):
         for mapping in self.mappings:
             osc_ip = mapping['osc_ip']
             osc_port = mapping['osc_port']
             osc_address = mapping['osc_address']
-            if osc_address not in self.osc_clients:
-                self.osc_clients[osc_address] = SimpleUDPClient(osc_ip, osc_port)
+            self.osc_clients[osc_address] = SimpleUDPClient(osc_ip, osc_port)
 
-    def convert_data(self, psn_data):
-        tracker_id, position_data, speed_data, orientation_data = psn_data
-        print(psn_data)
+    def convert_data(self, tracker_data):
+        tracker_id = tracker_data['id']
         for mapping in self.mappings:
             if mapping['tracker_id'] == tracker_id:
-                if mapping['psn_data_type'] == 'position':
-                    data = position_data
-                elif mapping['psn_data_type'] == 'speed':
-                    data = speed_data
-                elif mapping['psn_data_type'] == 'orientation':
-                    data = orientation_data
-                else:
-                    continue
-
-                scaled_data = [x * mapping['scale'] for x in data]
-
-                # Send to sACN
-                self.convert_to_sacn(scaled_data, mapping['sacn_universe'], mapping['sacn_address'])
-
-                # Send to OSC
-                self.convert_to_osc(scaled_data, mapping['osc_address'])
+                data_type = mapping['psn_data_type']
+                scale = mapping['scale']
+                data = [value * scale for value in tracker_data[data_type]]
+                self.convert_to_sacn(data, mapping['sacn_universe'], mapping['sacn_address'])
+                self.convert_to_osc(data, mapping['osc_address'])
 
     def convert_to_sacn(self, data, universe, address):
         self.sacn_sender[universe].dmx_data[address:address+len(data)] = data
 
     def convert_to_osc(self, data, address):
-        client = self.osc_clients[address]
-        client.send_message(address, data)
+        self.osc_clients[address].send_message(address, data)
 
     def stop(self):
         self.sacn_sender.stop()
+        for client in self.osc_clients.values():
+            client.close()

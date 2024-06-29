@@ -1,4 +1,5 @@
 {
+    "psn_multicast_ip": "236.10.10.10",
     "psn_ip": "127.0.0.1",
     "psn_port": 56565,
     "mappings": [
