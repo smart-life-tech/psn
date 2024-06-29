@@ -20,6 +20,7 @@ class DataConverter:
 
     def convert_data(self, psn_data):
         tracker_id, position_data, speed_data, orientation_data = psn_data
+        print(psn_data)
         for mapping in self.mappings:
             if mapping['tracker_id'] == tracker_id:
                 if mapping['psn_data_type'] == 'position':

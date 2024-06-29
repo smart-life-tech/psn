@@ -24,6 +24,7 @@ def send_psn_data():
     while True:
         packet = create_psn_packet(tracker_id, position, speed, orientation)
         sock.sendto(packet, (PSN_IP, PSN_PORT))
+        print(packet)
         time.sleep(0.016)  # Send data at approximately 60Hz
 
 if __name__ == '__main__':
