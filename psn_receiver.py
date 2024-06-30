@@ -1,21 +1,42 @@
 import socket
 import struct
+ 
 
+class PSNPacket:
+    def __init__(self, data):
+        # Parse the packet according to the PSN protocol
+        # Assuming the packet structure is known and the data format is:
+        # Tracker ID (int), Position (3 floats), Speed (3 floats), Orientation (3 floats)
+        
+        self.tracker_id, self.position, self.speed, self.orientation = self.parse_packet(data)
+    
+    def parse_packet(self, data):
+        # Example parsing logic (replace with actual packet structure)
+        tracker_id = struct.unpack_from('!I', data, 0)[0]
+        position = struct.unpack_from('!fff', data, 4)
+        speed = struct.unpack_from('!fff', data, 16)
+        orientation = struct.unpack_from('!fff', data, 28)
+        
+        return tracker_id, position, speed, orientation
 class PSNReceiver:
-    def __init__(self, multicast_ip, port):
-        self.multicast_ip = multicast_ip
+    def __init__(self, ip, port):
+        self.ip = ip
         self.port = port
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        self.sock.bind(('', self.port))
-
-        mreq = struct.pack("4sl", socket.inet_aton(self.multicast_ip), socket.INADDR_ANY)
-        self.sock.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq)
+        self.sock.bind((self.ip, self.port))
 
     def receive_data(self):
-        data, _ = self.sock.recvfrom(1024)
-        psn_data = self.parse_psn_data(data)
-        return psn_data
+        data, addr = self.sock.recvfrom(1024)  # Buffer size is 1024 bytes
+        psn_packet = PSNPacket(data)
+
+        # Extract the necessary data from the PSN packet
+        tracker_id = psn_packet.tracker_id
+        position_data = psn_packet.position
+        speed_data = psn_packet.speed
+        orientation_data = psn_packet.orientation
+
+        return tracker_id, position_data, speed_data, orientation_data
 
     def parse_psn_data(self, data):
         # Parse the data according to the provided PSN data structure

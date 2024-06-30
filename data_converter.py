@@ -28,7 +28,7 @@ class DataConverter:
     def init_sacn_universes(self):
         for mapping in self.mappings:
             universe = mapping['sacn_universe']
-            if universe not in self.sacn_sender.un:
+            if universe not in self.sacn_sender._outputs:
                 self.sacn_sender.activate_output(universe)
                 self.sacn_sender[universe].multicast = True
 
@@ -52,4 +52,3 @@ class DataConverter:
 
     def stop(self):
         self.sacn_sender.stop()
- 

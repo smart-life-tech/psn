@@ -80,14 +80,18 @@ def add_mapping():
 def start():
     def run():
         while True:
-            tracker_id, position_data, speed_data, orientation_data = psn_receiver.receive_data()
-            psn_data = {
-                'tracker_id':tracker_id,
-                'position': position_data,
-                'speed': speed_data,
-                'orientation': orientation_data
-            }
-            data_converter.convert_data(psn_data)
+            try:
+                tracker_id, position_data, speed_data, orientation_data = psn_receiver.receive_data()
+                psn_data = {
+                    tracker_id: {
+                        'position': position_data,
+                        'speed': speed_data,
+                        'orientation': orientation_data
+                    }
+                }
+                data_converter.convert_data(psn_data)
+            except Exception as e:
+                print(f"Error: {e}")
     threading.Thread(target=run).start()
     return jsonify('Data conversion started now')
 
