@@ -26,8 +26,8 @@ def save_config(config):
         json.dump(config, f)
 
 config = load_config()
-psn_receiver = PSNReceiver(config['psn_ip'], config['psn_port'])
-data_converter = DataConverter(config['mappings'])
+psn_receiver = PSNReceiver(config['psn_multicast_ip'], config['psn_port'])
+data_converter = DataConverter(CONFIG_FILE)
 
 # Apply mappings from config
 # for mapping in config['mappings']:
