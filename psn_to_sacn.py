@@ -76,5 +76,6 @@ def fill_dmx(psn_data):
         trgpos=psn_data.trackers[0].info
 
 if __name__ == "__main__":
+    print("Starting DMX...")
     start_dmx()
     start_psn()
