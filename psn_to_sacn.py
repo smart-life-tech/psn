@@ -28,7 +28,12 @@ def fill_dmx(psn_data):
         status= psn_data.trackers[0].status
         timestamp= psn_data.trackers[0].timestamp
         trgpos=psn_data.trackers[0].info
-        print(position)
+        
+        print("postion : ",position)
+        print("speed :" ,speed)
+        print("status :" ,status)
+        print("timestamp :" ,timestamp)
+        print("trgpos :" ,trgpos)
         dmx_data = [0] * 512
         dmx_data[0] = int(abs(position.x))
         dmx_data[1] = int(abs(position.y))
@@ -41,6 +46,33 @@ def fill_dmx(psn_data):
         
         #sender[1].dmx_data = dmx_data
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def fill_dmx(psn_data):
+    if isinstance(psn_data, pypsn.psn_data_packet):
+        position = psn_data.trackers[0].pos
+        speed=psn_data.trackers[0].speed
+        status= psn_data.trackers[0].status
+        timestamp= psn_data.trackers[0].timestamp
+        trgpos=psn_data.trackers[0].info
 
 if __name__ == "__main__":
     start_dmx()
