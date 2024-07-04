@@ -18,7 +18,7 @@ def stop_dmx():
 
 
 def start_psn():
-    pypsn.receiver(fill_dmx, "192.168.20.177").start()
+    pypsn.receiver(fill_dmx, "0.0.0.0").start()
 
 
 def fill_dmx(psn_data):
