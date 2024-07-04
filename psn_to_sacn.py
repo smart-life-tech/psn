@@ -29,8 +29,13 @@ def fill_dmx(psn_data):
         dmx_data[0] = int(abs(position.x))
         dmx_data[1] = int(abs(position.y))
         dmx_data[2] = int(abs(position.z))
-
-        sender[1].dmx_data = dmx_data
+        print(dmx_data)
+        if psn_data.trackers[0].vel.x > 0:
+            dmx_data[3] = int(abs(psn_data.trackers[0].vel.x))
+        else:
+            dmx_data[3] = int(abs(psn_data.trackers[0].vel.x))
+        
+        #sender[1].dmx_data = dmx_data
 
 
 if __name__ == "__main__":
