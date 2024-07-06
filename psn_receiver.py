@@ -1,83 +1,97 @@
-import socket
-import struct
- 
+import json
+from pythonosc.udp_client import SimpleUDPClient
+import sacn
+import pypsn
+# Simple forwarder of PSN to DMX. Turns all coordinates to positive ints...
 
-class PSNPacket:
-    def __init__(self, data):
-        # Parse the packet according to the PSN protocol
-        # Assuming the packet structure is known and the data format is:
-        # Tracker ID (int), Position (3 floats), Speed (3 floats), Orientation (3 floats)
-        
-        self.tracker_id, self.position, self.speed, self.orientation = self.parse_packet(data)
-    
-    def parse_packet(self, data):
-        # Example parsing logic (replace with actual packet structure)
-        tracker_id = struct.unpack_from('!I', data, 0)[0]
-        position = struct.unpack_from('!fff', data, 4)
-        speed = struct.unpack_from('!fff', data, 16)
-        orientation = struct.unpack_from('!fff', data, 28)
-        
-        return tracker_id, position, speed, orientation
-class PSNReceiver:
-    def __init__(self, ip, port):
-        self.ip = ip
-        self.port = port
-        self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
-        self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        self.sock.bind((self.ip, self.port))
+sender = sacn.sACNsender()
 
-    def receive_data(self):
-        data, addr = self.sock.recvfrom(1024)  # Buffer size is 1024 bytes
-        psn_packet = PSNPacket(data)
+class DataConverter:
+    def __init__(self, mappings_file):
+        self.mappings = []
+        self.load_mappings(mappings_file)
+        self.osc_clients = {}
+        self.sacn_sender = sacn.sACNsender()
+        self.sacn_sender.start()
+        self.init_osc_clients()
+        self.init_sacn_universes()
 
-        # Extract the necessary data from the PSN packet
-        tracker_id = psn_packet.tracker_id
-        position_data = psn_packet.position
-        speed_data = psn_packet.speed
-        orientation_data = psn_packet.orientation
+    def load_mappings(self, mappings_file):
+        with open(mappings_file, 'r') as f:
+            config = json.load(f)
+            self.mappings = config['mappings']
 
-        return tracker_id, position_data, speed_data, orientation_data
+    def init_osc_clients(self):
+        print(self.mappings)
+        for mapping in self.mappings:
+            osc_ip = mapping['osc_ip']
+            osc_port = mapping['osc_port']
+            if (osc_ip, osc_port) not in self.osc_clients:
+                self.osc_clients[(osc_ip, osc_port)] = SimpleUDPClient(osc_ip, osc_port)
 
-    def parse_psn_data(self, data):
-        # Parse the data according to the provided PSN data structure
-        chunk_id, data_length = struct.unpack_from('!HH', data, 0)
-        if chunk_id == 0x6755:  # PSN_V2_DATA_PACKET
-            header_id, header_length = struct.unpack_from('!HH', data, 4)
-            timestamp, version_high, version_low, frame_id, frame_packet_count = struct.unpack_from('!IHHHH', data, 8)
+    def init_sacn_universes(self):
+        for mapping in self.mappings:
+            universe = mapping['sacn_universe']
+            if universe not in self.sacn_sender._outputs:
+                self.sacn_sender.activate_output(universe)
+                self.sacn_sender[universe].multicast = True
 
-            offset = 20
-            tracker_list_id, tracker_list_length = struct.unpack_from('!HH', data, offset)
-            offset += 4
+    def convert_data(self, psn_data):
+        for mapping in self.mappings:
+            tracker_id = mapping['tracker_id']
+            if tracker_id in psn_data and mapping['psn_data_type'] in psn_data[tracker_id]:
+                scaled_data = self.scale_data(psn_data[tracker_id][mapping['psn_data_type']], mapping['scale'])
+                self.convert_to_sacn(scaled_data, mapping['sacn_universe'], mapping['sacn_address'])
+                self.convert_to_osc(scaled_data, mapping['osc_address'], mapping['osc_ip'], mapping['osc_port'])
 
-            trackers = []
-            while offset < len(data):
-                tracker_id, tracker_data_length = struct.unpack_from('!HH', data, offset)
-                offset += 4
+    def scale_data(self, data, scale):
+        return [d * scale for d in data]
 
-                tracker_data = {}
-                tracker_data['id'] = tracker_id
+    def convert_to_sacn(self, data, universe, address):
+        self.sacn_sender[universe].dmx_data[address:address+len(data)] = data
 
-                while tracker_data_length > 0:
-                    sub_chunk_id, sub_chunk_length = struct.unpack_from('!HH', data, offset)
-                    offset += 4
+    def convert_to_osc(self, data, address, osc_ip, osc_port):
+        client = self.osc_clients[(osc_ip, osc_port)]
+        client.send_message(address, data)
 
-                    if sub_chunk_id == 0x0000:  # PSN_DATA_TRACKER_POS
-                        x, y, z = struct.unpack_from('!fff', data, offset)
-                        tracker_data['position'] = [x, y, z]
-                    elif sub_chunk_id == 0x0001:  # PSN_DATA_TRACKER_SPEED
-                        x, y, z = struct.unpack_from('!fff', data, offset)
-                        tracker_data['speed'] = [x, y, z]
-                    elif sub_chunk_id == 0x0002:  # PSN_DATA_TRACKER_ORI
-                        x, y, z = struct.unpack_from('!fff', data, offset)
-                        tracker_data['orientation'] = [x, y, z]
-                    else:
-                        tracker_data['unknown'] = data[offset:offset+sub_chunk_length]
+    def stop(self):
+        self.sacn_sender.stop()
 
-                    offset += sub_chunk_length
-                    tracker_data_length -= sub_chunk_length + 4
 
-                trackers.append(tracker_data)
+def start_dmx():
+    sender.start()  # start the sending thread
+    sender.activate_output(1)  # start sending out data in the 1st universe
+    sender[1].multicast = True  # set multicast to True
 
-            return trackers
-        else:
-            return None
+
+def stop_dmx():
+    sender.stop()  # do not forget to stop the sender
+
+
+def start_psn():
+    pypsn.receiver(fill_dmx, "0.0.0.0").start()
+
+
+def fill_dmx(psn_data):
+    if isinstance(psn_data, pypsn.psn_data_packet):
+        position = psn_data.trackers[0].pos
+        position2 = psn_data.trackers[1].pos
+        dmx_data = [0] * 512
+        dmx_data[0] = int(abs(position.x))
+        dmx_data[1] = int(abs(position.y))
+        dmx_data[2] = int(abs(position.z))
+        if position.x > 0:
+            dmx_data[0] = 512 - int(abs(position.x))
+            print("x position", position.x)
+        if position2.y > 0:
+            dmx_data[1] = 512 - int(abs(position.y))
+            print("y position data: ", position2.y)
+        if position.z > 0:
+            dmx_data[2] = 512 - int(abs(position.z))
+            print(position.z)
+
+
+if __name__ == "__main__":
+    print("Starting...")
+    start_dmx()
+    start_psn()
