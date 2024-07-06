@@ -89,6 +89,8 @@ def start():
 
 @app.route('/stop', methods=['POST'])
 def stop():
+    psn_receiver.stop_dmx()
+    psn_receiver.stop_psn()
     data_converter.stop()
     return jsonify('Data conversion stopped')
 
