@@ -28,17 +28,25 @@ def fill_dmx(psn_data):
         dmx_data[0] = int(abs(position.x))
         dmx_data[1] = int(abs(position.y))
         dmx_data[2] = int(abs(position.z))
-        print(position)
+        #print(position)
         speed=psn_data.trackers[0].speed
         status= psn_data.trackers[0].status
         timestamp= psn_data.trackers[0].timestamp
         trgpos=psn_data.trackers[0].info
-        
-        print("postion : ",position)
-        print("speed :" ,speed)
-        print("status :" ,status)
-        print("timestamp :" ,timestamp)
-        print("trgpos :" ,trgpos)
+        if(position.x>0):
+            dmx_data[0]=512-int(abs(position.x))
+            #print(position.x)
+        if(position.y>0):
+            dmx_data[1]=512-int(abs(position.y))
+            print(position.y)
+        if(position.z>0):
+            dmx_data[2]=512-int(abs(position.z))
+            print(position.z)
+        # print("postion : ",position)
+        # print("speed :" ,speed)
+        # print("status :" ,status)
+        # print("timestamp :" ,timestamp)
+        # print("trgpos :" ,trgpos)
         #sender[1].dmx_data = dmx_data
 
 
