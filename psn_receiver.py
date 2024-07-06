@@ -44,17 +44,17 @@ class PSNReceiver:
             trgpos = psn_data.trackers[0].info
             if position.x > 0:
                 dmx_data[0] = 512 - int(abs(position.x))
-                print("x position", position.x)
+                #print("x position", position.x)
                 self.x = position.x
                 # print("y position : ",position.y)
             if position2.y > 0:
                 dmx_data[1] = 512 - int(abs(position.y))
-                print("y postion data====== : ", position2.y)
+                #print("y postion data====== : ", position2.y)
                 self.y = position2.y
                 # print("x postion data====== : ",position2.x)
             if position.z > 0:
                 dmx_data[2] = 512 - int(abs(position.z))
-                print(position.z)
+                #print(position.z)
                 self.z = position.z
             # print("postion : ",position)
             # print("speed :" ,speed)
