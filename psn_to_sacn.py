@@ -24,6 +24,7 @@ def start_psn():
 def fill_dmx(psn_data):
     if isinstance(psn_data, pypsn.psn_data_packet):
         position = psn_data.trackers[0].pos
+        position2 = psn_data.trackers[1].pos
         dmx_data = [0] * 512
         dmx_data[0] = int(abs(position.x))
         dmx_data[1] = int(abs(position.y))
@@ -36,9 +37,9 @@ def fill_dmx(psn_data):
         if(position.x>0):
             dmx_data[0]=512-int(abs(position.x))
             print("x position",position.x)
-        if(position.y>0):
+        if(position2.y>0 or position2.x>0):
             dmx_data[1]=512-int(abs(position.y))
-            print("y postion data====== : ",position.y)
+            print("y postion data====== : ",position2.y)
         if(position.z>0):
             dmx_data[2]=512-int(abs(position.z))
             print(position.z)
