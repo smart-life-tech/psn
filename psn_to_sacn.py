@@ -35,10 +35,10 @@ def fill_dmx(psn_data):
         trgpos=psn_data.trackers[0].info
         if(position.x>0):
             dmx_data[0]=512-int(abs(position.x))
-            print(position.x)
+            print("x position",position.x)
         if(position.y>0):
             dmx_data[1]=512-int(abs(position.y))
-            print(position.y)
+            print("y postion data====== : ",position.y)
         if(position.z>0):
             dmx_data[2]=512-int(abs(position.z))
             print(position.z)
