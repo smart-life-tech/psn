@@ -79,6 +79,7 @@ def start():
                             'orientation': orientation_data
                         }
                     }
+                    print(psn_data)
                     data_converter.convert_data(psn_data)
             except Exception as e:
                 print(f"Error: {e}")

@@ -5,6 +5,10 @@ import pypsn
 class PSNReceiver:
     def __init__(self):
         self.sender = sacn.sACNsender()
+        self.x=0
+        self.y=0
+        self.z=0
+        self.id=1
 
     def start_dmx(self):
         self.sender.start()  # start the sending thread
@@ -17,12 +21,18 @@ class PSNReceiver:
     def start_psn(self):
         pypsn.receiver(self.fill_dmx, "0.0.0.0").start()
 
+    def receive_data(self):
+        # Here you would implement the logic to receive and parse the PSN data
+        # This is a placeholder implementation and should be replaced with actual logic
+        return self.id,self.x, self.y, self.z
+        
+    
     def fill_dmx(self, psn_data):
         if isinstance(psn_data, pypsn.psn_data_packet):
             position = psn_data.trackers[0].pos
             position2 = psn_data.trackers[1].pos
             dmx_data = [0] * 512
-            dmx_data0] = int(abs(position.x))
+            dmx_data[0] = int(abs(position.x))
             dmx_data[1] = int(abs(position.y))
             dmx_data[2] = int(abs(position.z))
             # print(position)
@@ -33,14 +43,17 @@ class PSNReceiver:
             if position.x > 0:
                 dmx_data[0] = 512 - int(abs(position.x))
                 print("x position", position.x)
+                self.x = position.x
                 # print("y position : ",position.y)
             if position2.y > 0:
                 dmx_data[1] = 512 - int(abs(position.y))
                 print("y postion data====== : ", position2.y)
+                self.y = position2.y
                 # print("x postion data====== : ",position2.x)
             if position.z > 0:
                 dmx_data[2] = 512 - int(abs(position.z))
                 print(position.z)
+                self.z = position.z
             # print("postion : ",position)
             # print("speed :" ,speed)
             # print("status :" ,status)
