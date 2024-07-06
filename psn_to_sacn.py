@@ -35,7 +35,7 @@ def fill_dmx(psn_data):
         trgpos=psn_data.trackers[0].info
         if(position.x>0):
             dmx_data[0]=512-int(abs(position.x))
-            #print(position.x)
+            print(position.x)
         if(position.y>0):
             dmx_data[1]=512-int(abs(position.y))
             print(position.y)
@@ -51,5 +51,6 @@ def fill_dmx(psn_data):
 
 
 if __name__ == "__main__":
+    print("Starting...")
     start_dmx()
     start_psn()
