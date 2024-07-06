@@ -10,7 +10,7 @@ app = Flask(__name__)
 
 CONFIG_FILE = 'config.json'
 
-# Load configurationss
+# Load configurations
 def load_config():
     if os.path.exists(CONFIG_FILE):
         with open(CONFIG_FILE, 'r') as f:
@@ -18,6 +18,7 @@ def load_config():
     return {
         'psn_ip': '0.0.0.0',
         'psn_port': 56565,
+        'psn_multicast_ip': '236.10.10.10',
         'mappings': []
     }
 
@@ -26,20 +27,8 @@ def save_config(config):
         json.dump(config, f)
 
 config = load_config()
-psn_receiver = PSNReceiver(config['psn_multicast_ip'], config['psn_port'])
+psn_receiver = PSNReceiver()
 data_converter = DataConverter(CONFIG_FILE)
-
-# Apply mappings from config
-# for mapping in config['mappings']:
-#     data_converter.add_mapping(
-#         mapping['psn_field'],
-#         mapping['sacn_universe'],
-#         mapping['sacn_address'],
-#         mapping['osc_ip'],
-#         mapping['osc_port'],
-#         mapping['osc_address'],
-#         mapping['scale']
-#     )
 
 @app.route('/')
 def index():
@@ -82,18 +71,19 @@ def start():
         while True:
             try:
                 tracker_id, position_data, speed_data, orientation_data = psn_receiver.receive_data()
-                psn_data = {
-                    tracker_id: {
-                        'position': position_data,
-                        'speed': speed_data,
-                        'orientation': orientation_data
+                if tracker_id is not None:
+                    psn_data = {
+                        tracker_id: {
+                            'position': position_data,
+                            'speed': speed_data,
+                            'orientation': orientation_data
+                        }
                     }
-                }
-                data_converter.convert_data(psn_data)
+                    data_converter.convert_data(psn_data)
             except Exception as e:
                 print(f"Error: {e}")
     threading.Thread(target=run).start()
-    return jsonify('Data conversion started now')
+    return jsonify('Data conversion started')
 
 @app.route('/stop', methods=['POST'])
 def stop():
