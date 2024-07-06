@@ -68,6 +68,7 @@ def add_mapping():
 @app.route('/start', methods=['POST'])
 def start():
     def run():
+        psn_receiver.start_psn()
         while True:
             try:
                 tracker_id, position_data, speed_data, orientation_data = psn_receiver.receive_data()
