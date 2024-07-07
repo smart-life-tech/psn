@@ -43,6 +43,8 @@ class DataConverter:
         for tracker_id, data in psn_data.items():
             for mapping in self.mappings:
                 print(data['position'], mapping['psn_field'])
+                print(f"Data position object: {data['position']}")
+                print(f"Mapping PSN field: {mapping['psn_field']}")
                 value = getattr(data['position'], mapping['psn_field'], None)
                 print(value)
                 if value is not None:
