@@ -44,25 +44,20 @@ class DataConverter:
             print(f"Data: {data}")
             for mapping in self.mappings:
                 print(f"Mapping: {mapping}")
-                position = data.get('position', None)
-                if position is not None:
-                    print(f"Position: {position}")
-                    psn_field = mapping.get('psn_field', None)
-                    if psn_field:
-                        # Verify if the position data is an object with attributes or a dictionary
-                        value = getattr(position, psn_field, None) if hasattr(position, psn_field) else position.get(psn_field, None)
-                        print(f"Attempting to access field '{psn_field}' in position: {value}")
-                        if value is not None:
-                            scaled_value = int(value * mapping['scale'])
-                            print(f"Scaled Value: {scaled_value}")
-                            self.send_dmx(mapping['sacn_universe'], mapping['sacn_address'], scaled_value)
-                            self.send_osc(mapping['osc_ip'], mapping['osc_address'], scaled_value)
-                        else:
-                            print(f"Field '{psn_field}' not found in position: {position}")
+                psn_field = mapping.get('psn_field')
+                if psn_field:
+                    # Handle both dictionary and non-dictionary fields
+                    value = data.get(psn_field) if isinstance(data, dict) else data
+                    print(f"Attempting to access field '{psn_field}': {value}")
+                    if value is not None:
+                        scaled_value = int(value * mapping['scale'])
+                        print(f"Scaled Value: {scaled_value}")
+                        self.send_dmx(mapping['sacn_universe'], mapping['sacn_address'], scaled_value)
+                        self.send_osc(mapping['osc_ip'], mapping['osc_address'], scaled_value)
                     else:
-                        print("PSN field is not defined in mapping.")
+                        print(f"Field '{psn_field}' not found in data: {data}")
                 else:
-                    print("Position data is not available.")
+                    print("PSN field is not defined in mapping.")
 
     def send_dmx(self, universe, address, value):
         self.sender.activate_output(universe)
