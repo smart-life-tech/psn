@@ -73,6 +73,7 @@ def add_mapping():
 def start():
     def run():
         psn_receiver.start_psn()
+        psn_receiver.start_dmx()
         while True:
             try:
                 tracker_id, data = psn_receiver.receive_data()
