@@ -39,10 +39,11 @@ class DataConverter:
             self.osc_clients[osc_ip] = SimpleUDPClient(osc_ip, osc_port)
 
     def convert_data(self, psn_data):
-        print(psn_data)
+        #print(psn_data)
         for tracker_id, data in psn_data.items():
             for mapping in self.mappings:
                 value = getattr(data['position'], mapping['psn_field'], None)
+                print(value)
                 if value is not None:
                     scaled_value = int(value * mapping['scale'])
                     print(f"Sending {value} to {mapping['osc_ip']}:{mapping['osc_port']} {mapping['osc_address']}")
