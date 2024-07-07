@@ -43,21 +43,18 @@ class DataConverter:
             print(f"Tracker ID: {tracker_id}")
             print(f"Data: {data}")
             for mapping in self.mappings:
-                print(f"Mapping: {mapping}")
-                psn_field = mapping.get('psn_field')
-                if psn_field:
-                    # Handle both dictionary and non-dictionary fields
-                    value = data.get(psn_field) if isinstance(data, dict) else data
-                    print(f"Attempting to access field '{psn_field}': {value}")
+                if mapping['tracker_id'] == tracker_id:
+                    psn_data_type = mapping['psn_data_type']
+                    value = data.get(psn_data_type, None)
                     if value is not None:
                         scaled_value = int(value * mapping['scale'])
                         print(f"Scaled Value: {scaled_value}")
                         self.send_dmx(mapping['sacn_universe'], mapping['sacn_address'], scaled_value)
                         self.send_osc(mapping['osc_ip'], mapping['osc_address'], scaled_value)
                     else:
-                        print(f"Field '{psn_field}' not found in data: {data}")
+                        print(f"Field '{psn_data_type}' not found in data: {data}")
                 else:
-                    print("PSN field is not defined in mapping.")
+                    print(f"Tracker ID '{tracker_id}' does not match mapping tracker ID '{mapping['tracker_id']}'")
 
     def send_dmx(self, universe, address, value):
         self.sender.activate_output(universe)
