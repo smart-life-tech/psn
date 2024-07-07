@@ -16,11 +16,11 @@
         },
         {
             "tracker_id": 1,
-            "psn_field": "192.168.0.236",
+            "psn_field": "192.168.0.255",
             "psn_data_type": "speed",
             "sacn_universe": 2,
             "sacn_address": 1,
-            "osc_ip": "192.168.0.236",
+            "osc_ip": "192.168.0.255",
             "osc_port": 8000,
             "osc_address": "/tracker/1/speed/x",
             "scale": 1.0
@@ -31,7 +31,7 @@
             "psn_data_type": "orientation",
             "sacn_universe": 3,
             "sacn_address": 1,
-            "osc_ip": "192.168.0.236",
+            "osc_ip": "192.168.0.255",
             "osc_port": 8000,
             "osc_address": "/tracker/1/orientation/x",
             "scale": 1.0
