@@ -39,19 +39,30 @@ class DataConverter:
             self.osc_clients[osc_ip] = SimpleUDPClient(osc_ip, osc_port)
 
     def convert_data(self, psn_data):
-        #print(psn_data)
         for tracker_id, data in psn_data.items():
+            print(f"Tracker ID: {tracker_id}")
+            print(f"Data: {data}")
             for mapping in self.mappings:
-                print(data['position'], mapping['psn_field'])
-                print(f"Data position object: {data['position']}")
-                print(f"Mapping PSN field: {mapping['psn_field']}")
-                value = getattr(data['position'], mapping['psn_field'], None)
-                print(value)
-                if value is not None:
-                    scaled_value = int(value * mapping['scale'])
-                    print(f"Sending {value} to {mapping['osc_ip']}:{mapping['osc_port']} {mapping['osc_address']}")
-                    self.send_dmx(mapping['sacn_universe'], mapping['sacn_address'], scaled_value)
-                    self.send_osc(mapping['osc_ip'], mapping['osc_address'], scaled_value)
+                print(f"Mapping: {mapping}")
+                position = data.get('position', None)
+                if position is not None:
+                    print(f"Position: {position}")
+                    psn_field = mapping.get('psn_field', None)
+                    if psn_field:
+                        # Verify if the position data is an object with attributes or a dictionary
+                        value = getattr(position, psn_field, None) if hasattr(position, psn_field) else position.get(psn_field, None)
+                        print(f"Attempting to access field '{psn_field}' in position: {value}")
+                        if value is not None:
+                            scaled_value = int(value * mapping['scale'])
+                            print(f"Scaled Value: {scaled_value}")
+                            self.send_dmx(mapping['sacn_universe'], mapping['sacn_address'], scaled_value)
+                            self.send_osc(mapping['osc_ip'], mapping['osc_address'], scaled_value)
+                        else:
+                            print(f"Field '{psn_field}' not found in position: {position}")
+                    else:
+                        print("PSN field is not defined in mapping.")
+                else:
+                    print("Position data is not available.")
 
     def send_dmx(self, universe, address, value):
         self.sender.activate_output(universe)
