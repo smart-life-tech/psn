@@ -29,7 +29,7 @@ class DataConverter:
                     mapping['scale']
                 )
 
-    def add_mapping(self, tracker_id,psn_data_type,psn_field, sacn_universe, sacn_address, osc_ip, osc_port, osc_address, scale):
+    def add_mapping(self, tracker_id,psn_data_type,psn_field, sacn_universe, sacn_address, osc_ip, osc_port, osc_address1, osc_address2,osc_address3,scale):
         self.mappings.append({
             'tracker_id':tracker_id,
             'psn_data_type':psn_data_type,
@@ -38,7 +38,9 @@ class DataConverter:
             'sacn_address': sacn_address,
             'osc_ip': osc_ip,
             'osc_port': osc_port,
-            'osc_address': osc_address,
+            'osc_address1': osc_address1,
+            'osc_address2': osc_address2,
+            'osc_address3': osc_address3,
             'scale': scale
         })
         if osc_ip not in self.osc_clients:
