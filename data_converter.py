@@ -45,7 +45,7 @@ class DataConverter:
     def convert_data(self, psn_data):
         for tracker_id, data in psn_data.items():
             #print(f"Tracker ID: {tracker_id}")
-            x=data['postion']
+            x=data['position']
             y=data['speed']
             z=data['orientation']
             print(f"Data: {data}")
