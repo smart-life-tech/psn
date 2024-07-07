@@ -2,7 +2,7 @@ import json
 import sacn
 import pypsn
 from pythonosc.udp_client import SimpleUDPClient
-
+from pythonosc import udp_client
 class DataConverter:
     def __init__(self, config_file):
         self.config_file = config_file
@@ -71,6 +71,8 @@ class DataConverter:
         #self.sender[universe].dmx_data = dmx_data
 
     def send_osc(self, ip, address, value):
+        client = udp_client.SimpleUDPClient(ip, 56565)
+        client.send_message("/filter", value)
         if ip in self.osc_clients:
             self.osc_clients[ip].send_message(address, value)
 
