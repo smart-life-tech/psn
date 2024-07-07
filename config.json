@@ -11,7 +11,9 @@
             "sacn_address": 1,
             "osc_ip": "192.168.0.202",
             "osc_port": 8000,
-            "osc_address": "/tracker/1/x-axis/",
+            "osc_address1": "/tracker/1/x-axis/",
+            "osc_address2": "/tracker/2/y-axis/",
+            "osc_address3": "/tracker/3/z-axis/",
             "scale": 1.0
         },
         {
