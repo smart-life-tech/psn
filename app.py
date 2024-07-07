@@ -71,14 +71,10 @@ def start():
         psn_receiver.start_psn()
         while True:
             try:
-                tracker_id, position_data, speed_data, orientation_data = psn_receiver.receive_data()
+                tracker_id, data = psn_receiver.receive_data()
                 if tracker_id is not None:
                     psn_data = {
-                        tracker_id: {
-                            'position': position_data,
-                            'speed': speed_data,
-                            'orientation': orientation_data
-                        }
+                        tracker_id: data
                     }
                     #print(psn_data)
                     data_converter.convert_data(psn_data)
