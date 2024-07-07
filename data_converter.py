@@ -45,6 +45,9 @@ class DataConverter:
     def convert_data(self, psn_data):
         for tracker_id, data in psn_data.items():
             #print(f"Tracker ID: {tracker_id}")
+            x=data['postion']
+            y=data['speed']
+            z=data['orientation']
             print(f"Data: {data}")
             for mapping in self.mappings:
                 if mapping['tracker_id'] == tracker_id:
@@ -54,7 +57,9 @@ class DataConverter:
                         scaled_value = int(value * mapping['scale'])
                         #print(f"Scaled Value: {scaled_value}")
                         self.send_dmx(mapping['sacn_universe'], mapping['sacn_address'], scaled_value)
-                        self.send_osc(mapping['osc_ip'], mapping['osc_address'], psn_data)
+                        self.send_osc(mapping['osc_ip'], mapping['osc_address'], x)
+                        self.send_osc(mapping['osc_ip'], mapping['osc_address'], y)
+                        self.send_osc(mapping['osc_ip'], mapping['osc_address'], z)
                     else:
                         print(f"Field '{psn_data_type}' not found in data: {data}")
                 else:
@@ -73,7 +78,7 @@ class DataConverter:
     def send_osc(self, ip, address, value):
         client = udp_client.SimpleUDPClient(ip, 5005)
         print(ip)
-        client.send_message("/filter", value)
+        client.send_message(address, value)
         print(value)
         if ip in self.osc_clients:
             self.osc_clients[ip].send_message(address, value)

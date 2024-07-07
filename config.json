@@ -11,29 +11,29 @@
             "sacn_address": 1,
             "osc_ip": "192.168.0.202",
             "osc_port": 8000,
-            "osc_address": "/tracker/1/pos/x",
+            "osc_address": "/tracker/1/x-axis/",
             "scale": 1.0
         },
         {
-            "tracker_id": 1,
+            "tracker_id": 2,
             "psn_field": "192.168.0.255",
             "psn_data_type": "speed",
             "sacn_universe": 2,
             "sacn_address": 1,
             "osc_ip": "192.168.0.202",
             "osc_port": 8000,
-            "osc_address": "/tracker/1/speed/x",
+            "osc_address": "/tracker/1/y-axis/",
             "scale": 1.0
         },
         {
-            "tracker_id": 1,
+            "tracker_id": 3,
             "psn_field": "192.168.0.236",
             "psn_data_type": "orientation",
             "sacn_universe": 3,
             "sacn_address": 1,
             "osc_ip": "192.168.0.202",
             "osc_port": 8000,
-            "osc_address": "/tracker/1/orientation/x",
+            "osc_address": "/tracker/1/z-axis/",
             "scale": 1.0
         }
     ]
