@@ -26,8 +26,9 @@ class DataConverter:
                     mapping['scale']
                 )
 
-    def add_mapping(self, psn_field, sacn_universe, sacn_address, osc_ip, osc_port, osc_address, scale):
+    def add_mapping(self, tracker_id,psn_field, sacn_universe, sacn_address, osc_ip, osc_port, osc_address, scale):
         self.mappings.append({
+            'tracker_id':tracker_id,
             'psn_field': psn_field,
             'sacn_universe': sacn_universe,
             'sacn_address': sacn_address,
