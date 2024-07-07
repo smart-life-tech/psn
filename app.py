@@ -44,7 +44,8 @@ def configure():
 @app.route('/add_mapping', methods=['POST'])
 def add_mapping():
     mapping = {
-        'psn_field': request.form['psn_field'],
+        'tracker_id': int(request.form['tracker_id']),
+        'psn_data_type': request.form['psn_data_type'],
         'sacn_universe': int(request.form['sacn_universe']),
         'sacn_address': int(request.form['sacn_address']),
         'osc_ip': request.form['osc_ip'],
@@ -55,7 +56,8 @@ def add_mapping():
     config['mappings'].append(mapping)
     save_config(config)
     data_converter.add_mapping(
-        mapping['psn_field'],
+        mapping['tracker_id'],
+        mapping['psn_data_type'],
         mapping['sacn_universe'],
         mapping['sacn_address'],
         mapping['osc_ip'],

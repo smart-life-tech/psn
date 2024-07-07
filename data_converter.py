@@ -16,6 +16,7 @@ class DataConverter:
             config = json.load(f)
             for mapping in config['mappings']:
                 self.add_mapping(
+                    mapping['tracker_id'],
                     mapping['psn_field'],
                     mapping['sacn_universe'],
                     mapping['sacn_address'],
