@@ -54,7 +54,7 @@ class DataConverter:
                         scaled_value = int(value * mapping['scale'])
                         #print(f"Scaled Value: {scaled_value}")
                         self.send_dmx(mapping['sacn_universe'], mapping['sacn_address'], scaled_value)
-                        self.send_osc(mapping['osc_ip'], mapping['osc_address'], scaled_value)
+                        self.send_osc(mapping['osc_ip'], mapping['osc_address'], psn_data)
                     else:
                         print(f"Field '{psn_data_type}' not found in data: {data}")
                 else:
