@@ -23,7 +23,9 @@ class DataConverter:
                     mapping['sacn_address'],
                     mapping['osc_ip'],
                     mapping['osc_port'],
-                    mapping['osc_address'],
+                    mapping['osc_address1'],
+                    mapping['osc_address2'],
+                    mapping['osc_address3'],
                     mapping['scale']
                 )
 
