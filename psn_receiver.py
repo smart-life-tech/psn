@@ -26,7 +26,12 @@ class PSNReceiver:
     def receive_data(self):
         # Here you would implement the logic to receive and parse the PSN data
         # This is a placeholder implementation and should be replaced with actual logic
-        return self.id,self.x, self.y, self.z
+        #return self.id,self.x, self.y, self.z
+        tracker_id = 1  # replace with actual tracker_id extraction logic
+        position_data = self.x
+        speed_data = self.y
+        orientation_data = self.z
+        return tracker_id, {'position': position_data, 'speed': speed_data, 'orientation': orientation_data}
         
     
     def fill_dmx(self, psn_data):
