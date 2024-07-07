@@ -44,7 +44,7 @@ class DataConverter:
 
     def convert_data(self, psn_data):
         for tracker_id, data in psn_data.items():
-            print(f"Tracker ID: {tracker_id}")
+            #print(f"Tracker ID: {tracker_id}")
             print(f"Data: {data}")
             for mapping in self.mappings:
                 if mapping['tracker_id'] == tracker_id:
@@ -52,7 +52,7 @@ class DataConverter:
                     value = data.get(psn_data_type, None)
                     if value is not None:
                         scaled_value = int(value * mapping['scale'])
-                        print(f"Scaled Value: {scaled_value}")
+                        #print(f"Scaled Value: {scaled_value}")
                         self.send_dmx(mapping['sacn_universe'], mapping['sacn_address'], scaled_value)
                         self.send_osc(mapping['osc_ip'], mapping['osc_address'], scaled_value)
                     else:
@@ -71,8 +71,9 @@ class DataConverter:
         #self.sender[universe].dmx_data = dmx_data
 
     def send_osc(self, ip, address, value):
-        client = udp_client.SimpleUDPClient(ip, 56565)
+        client = udp_client.SimpleUDPClient(ip, 5005)
         client.send_message("/filter", value)
+        print(value)
         if ip in self.osc_clients:
             self.osc_clients[ip].send_message(address, value)
 
