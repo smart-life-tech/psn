@@ -5,7 +5,7 @@
     "mappings": [
         {
             "tracker_id": 1,
-            "psn_field": "x",
+            "psn_field": "192.168.0.236",
             "psn_data_type": "position",
             "sacn_universe": 1,
             "sacn_address": 1,
@@ -16,7 +16,7 @@
         },
         {
             "tracker_id": 1,
-            "psn_field": "x",
+            "psn_field": "192.168.0.236",
             "psn_data_type": "speed",
             "sacn_universe": 2,
             "sacn_address": 1,
@@ -27,7 +27,7 @@
         },
         {
             "tracker_id": 1,
-            "psn_field": "x",
+            "psn_field": "192.168.0.236",
             "psn_data_type": "orientation",
             "sacn_universe": 3,
             "sacn_address": 1,
