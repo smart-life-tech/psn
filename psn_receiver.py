@@ -38,6 +38,7 @@ class PSNReceiver:
         if isinstance(psn_data, pypsn.psn_data_packet):
             position = psn_data.trackers[0].pos
             position2 = psn_data.trackers[1].pos
+            position3 = psn_data.trackers[2].pos
             dmx_data = [0] * 512
             dmx_data[0] = int(abs(position.x))
             dmx_data[1] = int(abs(position.y))
@@ -57,10 +58,10 @@ class PSNReceiver:
                 #print("y postion data====== : ", position2.y)
                 self.y = position2.y
                 # print("x postion data====== : ",position2.x)
-            if position.z > 0:
+            if position3.z > 0:
                 dmx_data[2] = 512 - int(abs(position.z))
                 #print(position.z)
-                self.z = position.z
+                self.z = position3.z
             # print("postion : ",position)
             # print("speed :" ,speed)
             # print("status :" ,status)
