@@ -79,7 +79,7 @@ class DataConverter:
                     if value is not None:
                         axis_value = psn_data[tracker_id].get(mapping['axis'], 0)
                         scaled_value = self.scale_value(axis_value, mapping['psn_min'], mapping['psn_max'], mapping['osc_min'], mapping['osc_max'])
-                        self.send_dmx(mapping['sacn_universe'], mapping['sacn_address'], scaled_value)
+                        self.send_dmx(mapping['sacn_universe'], mapping['sacn_addr'], scaled_value)
                         self.send_osc(mapping['osc_ip'], mapping['osc_address1'], self.x)
                         self.send_osc(mapping['osc_ip'], mapping['osc_address2'], self.y)
                         self.send_osc(mapping['osc_ip'], mapping['osc_address3'], self.z)
