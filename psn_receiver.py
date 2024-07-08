@@ -21,7 +21,7 @@ class PSNReceiver:
     def start_psn(self):
         pypsn.receiver(self.fill_dmx, "0.0.0.0").start()
     def stop_psn(self):
-        pypsn.receiver().stop()
+        pypsn.receiver(self.fill_dmx).stop()
 
     def receive_data(self):
         # Here you would implement the logic to receive and parse the PSN data

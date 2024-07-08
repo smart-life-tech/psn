@@ -14,16 +14,35 @@
         <button type="submit">Save Configuration</button>
     </form>
 
-    <h2>Add Mapping</h2>
-    <form id="mappingForm">
-        PSN Field: <input type="text" name="psn_field"><br>
-        SACN Universe: <input type="text" name="sacn_universe"><br>
-        SACN Address: <input type="text" name="sacn_address"><br>
-        OSC IP: <input type="text" name="osc_ip"><br>
-        OSC Port: <input type="text" name="osc_port"><br>
-        OSC Address: <input type="text" name="osc_address"><br>
-        Scale: <input type="text" name="scale"><br>
-        <button type="submit">Add Mapping</button>
+    <h2>Add OSC Mapping</h2>
+    <form id="oscMappingForm">
+        PSN Source: <input type="text" name="psn_source"><br>
+        Server Name: <input type="text" name="server_name"><br>
+        Tracker ID: <input type="number" name="tracker_id"><br>
+        Tracker Name: <input type="text" name="tracker_name"><br>
+        Axis: <input type="text" name="axis"><br>
+        PSN Min: <input type="number" name="psn_min"><br>
+        PSN Max: <input type="number" name="psn_max"><br>
+        OSC Min: <input type="number" name="osc_min"><br>
+        OSC Max: <input type="number" name="osc_max"><br>
+        OSC Addr: <input type="text" name="osc_addr"><br>
+        <button type="submit">Add OSC Mapping</button>
+    </form>
+
+    <h2>Add SACN Mapping</h2>
+    <form id="sacnMappingForm">
+        PSN Source: <input type="text" name="psn_source"><br>
+        Server Name: <input type="text" name="server_name"><br>
+        Tracker ID: <input type="number" name="tracker_id"><br>
+        Tracker Name: <input type="text" name="tracker_name"><br>
+        Axis: <input type="text" name="axis"><br>
+        PSN Min: <input type="number" name="psn_min"><br>
+        PSN Max: <input type="number" name="psn_max"><br>
+        DMX Min: <input type="number" name="dmx_min"><br>
+        DMX Max: <input type="number" name="dmx_max"><br>
+        SACN Universe: <input type="number" name="sacn_universe"><br>
+        SACN Addr: <input type="number" name="sacn_addr"><br>
+        <button type="submit">Add SACN Mapping</button>
     </form>
 
     <button id="startButton">Start Conversion</button>
@@ -38,9 +57,16 @@
                 });
             });
 
-            $('#mappingForm').submit(function(event) {
+            $('#oscMappingForm').submit(function(event) {
                 event.preventDefault();
-                $.post('/add_mapping', $(this).serialize(), function(response) {
+                $.post('/add_osc_mapping', $(this).serialize(), function(response) {
+                    alert(response);
+                });
+            });
+
+            $('#sacnMappingForm').submit(function(event) {
+                event.preventDefault();
+                $.post('/add_sacn_mapping', $(this).serialize(), function(response) {
                     alert(response);
                 });
             });

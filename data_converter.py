@@ -23,49 +23,47 @@ class DataConverter:
             config = json.load(f)
             for mapping in config['mappings']:
                 self.add_mapping(
+                    mapping['type'],
+                    mapping['psn_source'],
+                    mapping['server_name'],
                     mapping['tracker_id'],
-                    mapping['psn_data_type'],
-                    mapping['psn_field'],
-                    mapping['sacn_universe'],
-                    mapping['sacn_address'],
-                    mapping['osc_ip'],
-                    mapping['osc_port'],
-                    mapping['osc_address1'],
-                    mapping['osc_address2'],
-                    mapping['osc_address3'],
-                    mapping['scale'],
-                    mapping['min_osc'],
-                    mapping['max_osc'],
-                    mapping['min_sacn'],
-                    mapping['max_sacn'],
-                    mapping['min_psn'],
-                    mapping['max_psn'],
-                    
+                    mapping['tracker_name'],
+                    mapping['axis'],
+                    mapping['psn_min'],
+                    mapping['psn_max'],
+                    mapping.get('osc_min', None),
+                    mapping.get('osc_max', None),
+                    mapping.get('osc_addr', None),
+                    mapping.get('dmx_min', None),
+                    mapping.get('dmx_max', None),
+                    mapping.get('sacn_universe', None),
+                    mapping.get('sacn_addr', None)
                 )
 
-    def add_mapping(self, tracker_id,psn_data_type,psn_field, sacn_universe, sacn_address, osc_ip, osc_port, osc_address1, osc_address2,osc_address3,scale,min_osc,max_osc,min_sacn,max_sacn,min_psn,max_psn):
-        self.mappings.append({
-            'tracker_id':tracker_id,
-            'psn_data_type':psn_data_type,
-            'psn_field': psn_field,
+    def add_mapping(self, mapping_type, psn_source, server_name, tracker_id, tracker_name, axis, psn_min, psn_max, osc_min=None, osc_max=None, osc_addr=None, dmx_min=None, dmx_max=None, sacn_universe=None, sacn_addr=None):
+        mapping = {
+            'type': mapping_type,
+            'psn_source': psn_source,
+            'server_name': server_name,
+            'tracker_id': tracker_id,
+            'tracker_name': tracker_name,
+            'axis': axis,
+            'psn_min': psn_min,
+            'psn_max': psn_max,
+            'osc_min': osc_min,
+            'osc_max': osc_max,
+            'osc_addr': osc_addr,
+            'dmx_min': dmx_min,
+            'dmx_max': dmx_max,
             'sacn_universe': sacn_universe,
-            'sacn_address': sacn_address,
-            'osc_ip': osc_ip,
-            'osc_port': osc_port,
-            'osc_address1': osc_address1,
-            'osc_address2': osc_address2,
-            'osc_address3': osc_address3,
-            'scale': scale,
-            'min_osc': min_osc,
-            'max_osc': max_osc,
-            'min_sacn': min_sacn,
-            'max_sacn': max_sacn,
-            'min_psn': min_psn,
-            'max_psn': max_psn,
-            
-        })
-        if osc_ip not in self.osc_clients:
-            self.osc_clients[osc_ip] = SimpleUDPClient(osc_ip, osc_port)
+            'sacn_addr': sacn_addr
+        }
+        self.mappings.append(mapping)
+        self.save_config()
+
+    def save_config(self):
+        with open(self.config_file, 'w') as f:
+            json.dump({"mappings": self.mappings}, f)
 
     def convert_data(self, psn_data):
         for tracker_id, data in psn_data.items():
@@ -80,19 +78,30 @@ class DataConverter:
                     value = data.get(psn_data_type, None)
                     if value is not None:
                         scaled_value = int(value * mapping['scale'])
-                        #print(f"Scaled Value: {scaled_value}")
                         self.send_dmx(mapping['sacn_universe'], mapping['sacn_address'], scaled_value)
-                        #self.send_dmx(mapping['sacn_universe'], mapping['sacn_address'], scaled_value,self.y)
-                        #self.send_dmx(mapping['sacn_universe'], mapping['sacn_address'], scaled_value,self.z)
-                        
                         self.send_osc(mapping['osc_ip'], mapping['osc_address1'], self.x)
                         self.send_osc(mapping['osc_ip'], mapping['osc_address2'], self.y)
                         self.send_osc(mapping['osc_ip'], mapping['osc_address3'], self.z)
+                        #================================================================#
+                        if tracker_id in psn_data:
+                            axis_value = psn_data[tracker_id].get(mapping['axis'], 0)
+                            if mapping['type'] == 'osc':
+                                output_value = self.scale_value(axis_value, mapping['psn_min'], mapping['psn_max'], mapping['osc_min'], mapping['osc_max'])
+                                self.send_osc(mapping['osc_addr'], output_value, mapping['server_name'])
+                            elif mapping['type'] == 'sacn':
+                                output_value = self.scale_value(axis_value, mapping['psn_min'], mapping['psn_max'], mapping['dmx_min'], mapping['dmx_max'])
+                                self.send_dmx(mapping['sacn_universe'], mapping['sacn_addr'], output_value)
                     else:
                         print(f"Field '{psn_data_type}' not found in data: {data}")
                 else:
                     print(f"Tracker ID '{tracker_id}' does not match mapping tracker ID '{mapping['tracker_id']}'")
 
+    def scale_value(self, value, input_min, input_max, output_min, output_max):
+        input_range = input_max - input_min
+        output_range = output_max - output_min
+        scaled_value = (((value - input_min) * output_range) / input_range) + output_min
+        return scaled_value
+    
     def send_dmx(self, universe, address, value):
         self.sender.activate_output(universe)
         self.sender[universe].multicast = True
@@ -112,7 +121,7 @@ class DataConverter:
             sender[universe].dmx_data = (int(map(self.x),0,255), int(map(self.y),0,255), int(map(self.z),0,255), 4)  # some test DMX data
 
 
-    def send_osc(self, ip, address, value):
+    def send_osc(self,  address, value,ip):
         client = udp_client.SimpleUDPClient(ip, 5005) 
         #print(ip)
         client.send_message(address, value)

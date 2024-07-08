@@ -41,48 +41,67 @@ def configure():
     save_config(config)
     return jsonify('Configuration saved')
 
-@app.route('/add_mapping', methods=['POST'])
-def add_mapping():
+@app.route('/add_osc_mapping', methods=['POST'])
+def add_osc_mapping():
     mapping = {
+        'psn_source': request.form['psn_source'],
+        'server_name': request.form['server_name'],
         'tracker_id': int(request.form['tracker_id']),
-        'psn_data_type': request.form['psn_data_type'],
-        'sacn_universe': int(request.form['sacn_universe']),
-        'sacn_address': int(request.form['sacn_address']),
-        'osc_ip': request.form['osc_ip'],
-        'osc_port': int(request.form['osc_port']),
-        'osc_address': request.form['osc_address'],
-        'scale': float(request.form['scale']),
-        'osc_address1': request.form['osc_address1'],
-        'osc_address2': request.form['osc_address2'],
-        'osc_address3': request.form['osc_address3'],
-        'min_psn': int(request.form['min_psn']),
-        'max_psn': int(request.form['max_psn']),
-        'min_sacn': int(request.form['min_sacn']),
-        'max_sacn': int(request.form['max_sacn']),
-        'min_osc': int(request.form['min_osc']),
-        'max_osc': int(request.form['max_osc'])
+        'tracker_name': request.form['tracker_name'],
+        'axis': request.form['axis'],
+        'psn_min': float(request.form['psn_min']),
+        'psn_max': float(request.form['psn_max']),
+        'osc_min': float(request.form['osc_min']),
+        'osc_max': float(request.form['osc_max']),
+        'osc_addr': request.form['osc_addr'],
     }
     config['mappings'].append(mapping)
     save_config(config)
     data_converter.add_mapping(
+        mapping['psn_source'],
+        mapping['server_name'],
         mapping['tracker_id'],
-        mapping['psn_data_type'],
-        mapping['sacn_universe'],
-        mapping['sacn_address'],
-        mapping['osc_ip'],
-        mapping['osc_port'],
-        mapping['osc_address1'],
-        mapping['osc_address2'],
-        mapping['osc_address3'],
-        mapping['scale'],
-        mapping['min_psn'],
-        mapping['max_psn'],
-        mapping['min_sacn'],
-        mapping['max_sacn'],
-        mapping['min_osc'],
-        mapping['max_osc']
+        mapping['tracker_name'],
+        mapping['axis'],
+        mapping['psn_min'],
+        mapping['psn_max'],
+        mapping['osc_min'],
+        mapping['osc_max'],
+        mapping['osc_addr']
     )
-    return jsonify('Mapping added')
+    return jsonify('OSC Mapping added')
+
+@app.route('/add_sacn_mapping', methods=['POST'])
+def add_sacn_mapping():
+    mapping = {
+        'psn_source': request.form['psn_source'],
+        'server_name': request.form['server_name'],
+        'tracker_id': int(request.form['tracker_id']),
+        'tracker_name': request.form['tracker_name'],
+        'axis': request.form['axis'],
+        'psn_min': float(request.form['psn_min']),
+        'psn_max': float(request.form['psn_max']),
+        'dmx_min': int(request.form['dmx_min']),
+        'dmx_max': int(request.form['dmx_max']),
+        'sacn_universe': int(request.form['sacn_universe']),
+        'sacn_addr': int(request.form['sacn_addr']),
+    }
+    config['mappings'].append(mapping)
+    save_config(config)
+    data_converter.add_mapping(
+        mapping['psn_source'],
+        mapping['server_name'],
+        mapping['tracker_id'],
+        mapping['tracker_name'],
+        mapping['axis'],
+        mapping['psn_min'],
+        mapping['psn_max'],
+        mapping['dmx_min'],
+        mapping['dmx_max'],
+        mapping['sacn_universe'],
+        mapping['sacn_addr']
+    )
+    return jsonify('SACN Mapping added')
 
 @app.route('/start', methods=['POST'])
 def start():
