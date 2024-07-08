@@ -57,7 +57,7 @@ class DataConverter:
             self.z=data['orientation']
             print(f"Data: {data}")
             for mapping in self.mappings:
-                if mapping['tracker_id'] == tracker_id:
+                if mapping['tracker_id'] == tracker_id: 
                     psn_data_type = mapping['psn_data_type']
                     value = data.get(psn_data_type, None)
                     if value is not None:
