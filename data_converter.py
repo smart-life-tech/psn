@@ -33,10 +33,17 @@ class DataConverter:
                     mapping['osc_address1'],
                     mapping['osc_address2'],
                     mapping['osc_address3'],
-                    mapping['scale']
+                    mapping['scale'],
+                    mapping['min_osc'],
+                    mapping['max_osc'],
+                    mapping['min_sacn'],
+                    mapping['max_sacn'],
+                    mapping['min_psn'],
+                    mapping['max_psn'],
+                    
                 )
 
-    def add_mapping(self, tracker_id,psn_data_type,psn_field, sacn_universe, sacn_address, osc_ip, osc_port, osc_address1, osc_address2,osc_address3,scale):
+    def add_mapping(self, tracker_id,psn_data_type,psn_field, sacn_universe, sacn_address, osc_ip, osc_port, osc_address1, osc_address2,osc_address3,scale,min_osc,max_osc,min_sacn,max_sacn,min_psn,max_psn):
         self.mappings.append({
             'tracker_id':tracker_id,
             'psn_data_type':psn_data_type,
@@ -48,7 +55,14 @@ class DataConverter:
             'osc_address1': osc_address1,
             'osc_address2': osc_address2,
             'osc_address3': osc_address3,
-            'scale': scale
+            'scale': scale,
+            'min_osc': min_osc,
+            'max_osc': max_osc,
+            'min_sacn': min_sacn,
+            'max_sacn': max_sacn,
+            'min_psn': min_psn,
+            'max_psn': max_psn,
+            
         })
         if osc_ip not in self.osc_clients:
             self.osc_clients[osc_ip] = SimpleUDPClient(osc_ip, osc_port)

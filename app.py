@@ -51,7 +51,16 @@ def add_mapping():
         'osc_ip': request.form['osc_ip'],
         'osc_port': int(request.form['osc_port']),
         'osc_address': request.form['osc_address'],
-        'scale': float(request.form['scale'])
+        'scale': float(request.form['scale']),
+        'osc_address1': request.form['osc_address1'],
+        'osc_address2': request.form['osc_address2'],
+        'osc_address3': request.form['osc_address3'],
+        'min_psn': int(request.form['min_psn']),
+        'max_psn': int(request.form['max_psn']),
+        'min_sacn': int(request.form['min_sacn']),
+        'max_sacn': int(request.form['max_sacn']),
+        'min_osc': int(request.form['min_osc']),
+        'max_osc': int(request.form['max_osc'])
     }
     config['mappings'].append(mapping)
     save_config(config)
@@ -65,7 +74,13 @@ def add_mapping():
         mapping['osc_address1'],
         mapping['osc_address2'],
         mapping['osc_address3'],
-        mapping['scale']
+        mapping['scale'],
+        mapping['min_psn'],
+        mapping['max_psn'],
+        mapping['min_sacn'],
+        mapping['max_sacn'],
+        mapping['min_osc'],
+        mapping['max_osc']
     )
     return jsonify('Mapping added')
 

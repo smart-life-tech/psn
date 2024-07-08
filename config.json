@@ -14,7 +14,13 @@
             "osc_address1": "/tracker/1/x-axis/",
             "osc_address2": "/tracker/2/y-axis/",
             "osc_address3": "/tracker/3/z-axis/",
-            "scale": 1.0
+            "scale": 1.0,
+            "min_psn":0,
+            "max_psn":10000,
+            "min_osc":0,
+            "max_osc":255,
+            "min_sacn":0,
+            "max_sacn":255
         }
     ]
 }
