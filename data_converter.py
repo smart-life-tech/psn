@@ -10,6 +10,9 @@ class DataConverter:
         self.osc_clients = {}
         self.mappings = []
         self.load_config()
+        self.x=0
+        self.y=0
+        self.z=0
 
     def load_config(self):
         with open(self.config_file, 'r') as f:
@@ -49,9 +52,9 @@ class DataConverter:
     def convert_data(self, psn_data):
         for tracker_id, data in psn_data.items():
             #print(f"Tracker ID: {tracker_id}")
-            x=data['position']
-            y=data['speed']
-            z=data['orientation']
+            self.x=data['position']
+            self.y=data['speed']
+            self.z=data['orientation']
             print(f"Data: {data}")
             for mapping in self.mappings:
                 if mapping['tracker_id'] == tracker_id:
@@ -60,9 +63,9 @@ class DataConverter:
                     if value is not None:
                         scaled_value = int(value * mapping['scale'])
                         #print(f"Scaled Value: {scaled_value}")
-                        self.send_dmx(mapping['sacn_universe'], mapping['sacn_address'], scaled_value,x)
-                        self.send_dmx(mapping['sacn_universe'], mapping['sacn_address'], scaled_value,y)
-                        self.send_dmx(mapping['sacn_universe'], mapping['sacn_address'], scaled_value,z)
+                        self.send_dmx(mapping['sacn_universe'], mapping['sacn_address'], scaled_value,self.x)
+                        self.send_dmx(mapping['sacn_universe'], mapping['sacn_address'], scaled_value,self.y)
+                        self.send_dmx(mapping['sacn_universe'], mapping['sacn_address'], scaled_value,self.z)
                         
                         self.send_osc(mapping['osc_ip'], mapping['osc_address1'], x)
                         self.send_osc(mapping['osc_ip'], mapping['osc_address2'], y)
@@ -82,9 +85,9 @@ class DataConverter:
         #dmx_data[address] = value
         #self.sender[universe].dmx_data = dmx_data
             dmx_data = [0] * 512
-            dmx_data[0] =  value
-            dmx_data[1] = value
-            dmx_data[2] = value
+            dmx_data[0] =  self.x
+            dmx_data[1] = self.y
+            dmx_data[2] = self.z
 
             self.sender[1].dmx_data = dmx_data
 
