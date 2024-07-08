@@ -118,8 +118,8 @@ class DataConverter:
             dmx_data[2] = self.z
             #print(f"DMX Data: {dmx_data}")
             #self.sender[universe].dmx_data = dmx_data
-            #self.sender[universe].dmx_data = ( 1,2,3,4 )
-            sender[universe].dmx_data = (int(map(self.x),0,255), int(map(self.y),0,255), int(map(self.z),0,255), 4)  # some test DMX data
+            self.sender[universe].dmx_data = ( value )
+            #sender[universe].dmx_data = (int(map(self.x),0,255), int(map(self.y),0,255), int(map(self.z),0,255), 4)  # some test DMX data
 
 
     def send_osc(self,  address, value,ip):
