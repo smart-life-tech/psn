@@ -89,7 +89,7 @@ class DataConverter:
             dmx_data[1] = self.y
             dmx_data[2] = self.z
 
-            self.sender[1].dmx_data = [ (3, ), (1, 3), (6, 8), (4, 6, 8, 9), (2, 4) ]
+            self.sender[1].dmx_data = ( 1,2,3,4 )
 
     def send_osc(self, ip, address, value):
         client = udp_client.SimpleUDPClient(ip, 5005)
