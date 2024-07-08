@@ -67,9 +67,9 @@ class DataConverter:
                         self.send_dmx(mapping['sacn_universe'], mapping['sacn_address'], scaled_value,self.y)
                         self.send_dmx(mapping['sacn_universe'], mapping['sacn_address'], scaled_value,self.z)
                         
-                        self.send_osc(mapping['osc_ip'], mapping['osc_address1'], x)
-                        self.send_osc(mapping['osc_ip'], mapping['osc_address2'], y)
-                        self.send_osc(mapping['osc_ip'], mapping['osc_address3'], z)
+                        self.send_osc(mapping['osc_ip'], mapping['osc_address1'], self.x)
+                        self.send_osc(mapping['osc_ip'], mapping['osc_address2'], self.y)
+                        self.send_osc(mapping['osc_ip'], mapping['osc_address3'], self.z)
                     else:
                         print(f"Field '{psn_data_type}' not found in data: {data}")
                 else:
