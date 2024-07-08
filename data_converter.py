@@ -60,7 +60,10 @@ class DataConverter:
                     if value is not None:
                         scaled_value = int(value * mapping['scale'])
                         #print(f"Scaled Value: {scaled_value}")
-                        self.send_dmx(mapping['sacn_universe'], mapping['sacn_address'], scaled_value)
+                        self.send_dmx(mapping['sacn_universe'], mapping['sacn_address'], scaled_value,x)
+                        self.send_dmx(mapping['sacn_universe'], mapping['sacn_address'], scaled_value,y)
+                        self.send_dmx(mapping['sacn_universe'], mapping['sacn_address'], scaled_value,z)
+                        
                         self.send_osc(mapping['osc_ip'], mapping['osc_address1'], x)
                         self.send_osc(mapping['osc_ip'], mapping['osc_address2'], y)
                         self.send_osc(mapping['osc_ip'], mapping['osc_address3'], z)
