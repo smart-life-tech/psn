@@ -64,8 +64,8 @@ class DataConverter:
                         scaled_value = int(value * mapping['scale'])
                         #print(f"Scaled Value: {scaled_value}")
                         self.send_dmx(mapping['sacn_universe'], mapping['sacn_address'], scaled_value,self.x)
-                        self.send_dmx(mapping['sacn_universe'], mapping['sacn_address'], scaled_value,self.y)
-                        self.send_dmx(mapping['sacn_universe'], mapping['sacn_address'], scaled_value,self.z)
+                        #self.send_dmx(mapping['sacn_universe'], mapping['sacn_address'], scaled_value,self.y)
+                        #self.send_dmx(mapping['sacn_universe'], mapping['sacn_address'], scaled_value,self.z)
                         
                         self.send_osc(mapping['osc_ip'], mapping['osc_address1'], self.x)
                         self.send_osc(mapping['osc_ip'], mapping['osc_address2'], self.y)
@@ -81,10 +81,10 @@ class DataConverter:
         dmx_data = [0] * 512
         if 0 <= address < 512:
             dmx_data[address] = value if 0 <= value < 256 else 0  # Ensure value is a valid byte
-            self.sender[universe].dmx_data = dmx_data
-        #dmx_data[address] = value
-        #self.sender[universe].dmx_data = dmx_data
-            dmx_data = [0] * 512
+            #self.sender[universe].dmx_data = dmx_data
+            #dmx_data[address] = value
+            #self.sender[universe].dmx_data = dmx_data
+            dmx_data = [1] * 512
             dmx_data[0] =  self.x
             dmx_data[1] = self.y
             dmx_data[2] = self.z
