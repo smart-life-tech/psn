@@ -74,8 +74,8 @@ class DataConverter:
             print(f"Data: {data}")
             for mapping in self.mappings:
                 if mapping['tracker_id'] == tracker_id: 
-                    psn_data_type = mapping['psn_data_type']
-                    value = data.get(psn_data_type, None)
+                    #psn_data_type = mapping['psn_data_type']
+                    value = 1#data.get(psn_data_type, None)
                     if value is not None:
                         scaled_value = int(value * mapping['scale'])
                         self.send_dmx(mapping['sacn_universe'], mapping['sacn_address'], scaled_value)
@@ -92,7 +92,7 @@ class DataConverter:
                                 output_value = self.scale_value(axis_value, mapping['psn_min'], mapping['psn_max'], mapping['dmx_min'], mapping['dmx_max'])
                                 self.send_dmx(mapping['sacn_universe'], mapping['sacn_addr'], output_value)
                     else:
-                        print(f"Field '{psn_data_type}' not found in data: {data}")
+                        print(f"Field   not found in data: {data}")
                 else:
                     print(f"Tracker ID '{tracker_id}' does not match mapping tracker ID '{mapping['tracker_id']}'")
 
