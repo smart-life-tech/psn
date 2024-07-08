@@ -78,7 +78,7 @@ class DataConverter:
     def send_dmx(self, universe, address, value):
         self.sender.activate_output(universe)
         self.sender[universe].multicast = True
-        dmx_data = [0] 
+        dmx_data = [0] * 512
         if 0 <= address < 512:
             #dmx_data[address] = value if 0 <= value < 256 else 0  # Ensure value is a valid byte
             #self.sender[universe].dmx_data = dmx_data
