@@ -78,7 +78,7 @@ class DataConverter:
     def send_dmx(self, universe, address, value):
         self.sender.activate_output(universe)
         self.sender[universe].multicast = True
-        dmx_data = [0] * 512
+        dmx_data = [0] 
         if 0 <= address < 512:
             #dmx_data[address] = value if 0 <= value < 256 else 0  # Ensure value is a valid byte
             #self.sender[universe].dmx_data = dmx_data
@@ -88,8 +88,9 @@ class DataConverter:
             dmx_data[0] =  self.x
             dmx_data[1] = self.y
             dmx_data[2] = self.z
-
-            self.sender[1].dmx_data = ( 1,2,3,4 )
+            print(f"DMX Data: {dmx_data}")
+            #self.sender[universe].dmx_data = dmx_data
+            self.sender[universe].dmx_data = ( 1,2,3,4 )
 
     def send_osc(self, ip, address, value):
         client = udp_client.SimpleUDPClient(ip, 5005)
