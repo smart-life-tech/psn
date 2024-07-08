@@ -12,10 +12,10 @@
             "osc_min": -100,
             "osc_max": 100,
             "osc_addr": "/custom/track/6",
-            "dmx_min": null,
-            "dmx_max": null,
-            "sacn_universe": null,
-            "sacn_addr": null
+            "dmx_min": 0,
+            "dmx_max": 255,
+            "sacn_universe": 1,
+            "sacn_addr": 1
         },
         {
             "type": "sacn",
@@ -26,9 +26,9 @@
             "axis": "Y",
             "psn_min": -25,
             "psn_max": 200,
-            "osc_min": null,
-            "osc_max": null,
-            "osc_addr": null,
+            "osc_min": 0,
+            "osc_max":100,
+            "osc_addr": 1,
             "dmx_min": 0,
             "dmx_max": 255,
             "sacn_universe": 2,
