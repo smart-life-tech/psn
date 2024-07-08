@@ -3,6 +3,10 @@ import sacn
 import pypsn
 from pythonosc.udp_client import SimpleUDPClient
 from pythonosc import udp_client
+sender = sacn.sACNsender()  # provide an IP-Address to bind to if you want to send multicast packets from a specific interface
+sender.start()  # start the sending thread
+sender.activate_output(1)  # start sending out data in the 1st universe
+sender[1].multicast = True  # set multicast to True
 class DataConverter:
     def __init__(self, config_file):
         self.config_file = config_file
@@ -88,9 +92,11 @@ class DataConverter:
             dmx_data[0] =  self.x
             dmx_data[1] = self.y
             dmx_data[2] = self.z
-            print(f"DMX Data: {dmx_data}")
-            self.sender[universe].dmx_data = dmx_data
+            #print(f"DMX Data: {dmx_data}")
+            #self.sender[universe].dmx_data = dmx_data
             #self.sender[universe].dmx_data = ( 1,2,3,4 )
+            sender[universe].dmx_data = (int(self.x), int(self.y), int(self.z), 4)  # some test DMX data
+
 
     def send_osc(self, ip, address, value):
         client = udp_client.SimpleUDPClient(ip, 5005)
