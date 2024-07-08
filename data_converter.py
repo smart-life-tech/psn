@@ -84,7 +84,7 @@ class DataConverter:
             #self.sender[universe].dmx_data = dmx_data
             #dmx_data[address] = value
             #self.sender[universe].dmx_data = dmx_data
-            dmx_data = [1] * 512
+            #dmx_data = [1] * 512
             dmx_data[0] =  self.x
             dmx_data[1] = self.y
             dmx_data[2] = self.z
