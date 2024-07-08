@@ -52,7 +52,15 @@ class PSNReceiver:
                 dmx_data[0] = 512 - int(abs(position.x))
                 #print("x position", position.x)
                 self.x = position.x
-                # print("y position : ",position.y)
+                print("x position : ",position.x)
+                print("y position : ",position.y)
+                print("z position : ",position.z)
+                print("x position data====== : ", position2.x)
+                print("y position data====== : ", position2.y)
+                print("z position data====== : ", position2.z)
+                print("x position data3====== : ", position3.x)
+                print("y position data3====== : ", position3.y)
+                print("z position data3====== : ", position3.z)
             if position2.y > 0:
                 dmx_data[1] = 512 - int(abs(position.y))
                 #print("y postion data====== : ", position2.y)
