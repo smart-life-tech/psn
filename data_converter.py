@@ -17,6 +17,11 @@ class DataConverter:
         self.x=0
         self.y=0
         self.z=0
+        self.mindmx=0
+        self.maxdmx=0
+        self.minpsn=0
+        self.maxpsn=0
+        
 
     def load_config(self):
         with open(self.config_file, 'r') as f:
@@ -80,6 +85,11 @@ class DataConverter:
                     #psn_data_type = mapping['psn_data_type']
                     value = 1#data.get(psn_data_type, None)
                     if value is not None:
+                        self.minpsn=mapping['psn_min']
+                        self.maxpsn=mapping['psn_max']
+                        self.mindmx=mapping['dmx_min']
+                        self.maxdmx=mapping['dmx_max']
+                        
                         axis_value = psn_data[tracker_id].get(mapping['axis'], 0)
                         scaled_value = self.scale_value(axis_value, mapping['psn_min'], mapping['psn_max'], mapping['osc_min'], mapping['osc_max'])
                         self.send_dmx(mapping['sacn_universe'], mapping['sacn_addr'], scaled_value)
@@ -122,8 +132,10 @@ class DataConverter:
             #print(f"DMX Data: {dmx_data}")
             #self.sender[universe].dmx_data = dmx_data
             #self.sender[universe].dmx_data = ( int(value) )
-            
-            sender[universe].dmx_data = (int(map(self.x),0,255), int(map(self.y),0,255), int(map(self.z),0,255), 4)  # some test DMX data
+            outputx = self.scale_value(self.x, self.minpsn, self.maxpsn, self.mindmx,self.maxdmx)
+            outputy = self.scale_value(self.y, self.minpsn, self.maxpsn, self.mindmx,self.maxdmx)
+            outputz = self.scale_value(self.z, self.minpsn, self.maxpsn, self.mindmx,self.maxdmx)
+            sender[universe].dmx_data = (int(outputx), int(outputy), int(outputz), 4)  # some test DMX data
 
 
     def send_osc(self,  address, value,ip):
