@@ -104,7 +104,7 @@ class DataConverter:
                                 self.send_osc(mapping['osc_addr'], output_value, mapping['server_name'])
                             elif mapping['type'] == 'sacn':
                                 output_value = self.scale_value(axis_value, mapping['psn_min'], mapping['psn_max'], mapping['dmx_min'], mapping['dmx_max'])
-                                self.send_dmx(mapping['sacn_universe'], mapping['sacn_addr'], output_value)
+                                #self.send_dmx(mapping['sacn_universe'], mapping['sacn_addr'], output_value)
                     else:
                         print(f"Field   not found in data: {data}")
                 else:
@@ -139,7 +139,7 @@ class DataConverter:
 
 
     def send_osc(self,  address, value,ip):
-        client = udp_client.SimpleUDPClient(ip, 5005) 
+        client = udp_client.SimpleUDPClient(address, 5005) 
         print(ip)
         client.send_message(address, value)
         print(address)
