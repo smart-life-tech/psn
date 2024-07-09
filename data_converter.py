@@ -24,6 +24,7 @@ class DataConverter:
             for mapping in config['mappings']:
                 self.add_mapping(
                     mapping['type'],
+                    mapping.get('osc_ip',None),
                     mapping['psn_source'],
                     mapping['server_name'],
                     mapping['tracker_id'],
@@ -37,10 +38,11 @@ class DataConverter:
                     mapping.get('dmx_min', None),
                     mapping.get('dmx_max', None),
                     mapping.get('sacn_universe', None),
-                    mapping.get('sacn_addr', None)
+                    mapping.get('sacn_addr', None),
+                    
                 )
 
-    def add_mapping(self, mapping_type, psn_source, server_name, tracker_id, tracker_name, axis, psn_min, psn_max, osc_min=None, osc_max=None, osc_addr=None, dmx_min=None, dmx_max=None, sacn_universe=None, sacn_addr=None):
+    def add_mapping(self, mapping_type,osc_ip, psn_source, server_name, tracker_id, tracker_name, axis, psn_min, psn_max, osc_min=None, osc_max=None, osc_addr=None, dmx_min=None, dmx_max=None, sacn_universe=None, sacn_addr=None):
         mapping = {
             'type': mapping_type,
             'psn_source': psn_source,
@@ -56,7 +58,8 @@ class DataConverter:
             'dmx_min': dmx_min,
             'dmx_max': dmx_max,
             'sacn_universe': sacn_universe,
-            'sacn_addr': sacn_addr
+            'sacn_addr': sacn_addr,
+            'osc_ip':osc_ip
         }
         self.mappings.append(mapping)
         self.save_config()
@@ -80,9 +83,9 @@ class DataConverter:
                         axis_value = psn_data[tracker_id].get(mapping['axis'], 0)
                         scaled_value = self.scale_value(axis_value, mapping['psn_min'], mapping['psn_max'], mapping['osc_min'], mapping['osc_max'])
                         self.send_dmx(mapping['sacn_universe'], mapping['sacn_addr'], scaled_value)
-                        self.send_osc(mapping['osc_ip'], mapping['osc_address1'], self.x)
-                        self.send_osc(mapping['osc_ip'], mapping['osc_address2'], self.y)
-                        self.send_osc(mapping['osc_ip'], mapping['osc_address3'], self.z)
+                        self.send_osc(mapping['osc_ip'], self.x ,mapping['osc_address1'])
+                        self.send_osc(mapping['osc_ip'], self.y,mapping['osc_address2'] )
+                        self.send_osc(mapping['osc_ip'], self.z,mapping['osc_address3'] )
                         #================================================================#
                         if tracker_id in psn_data:
                             axis_value = psn_data[tracker_id].get(mapping['axis'], 0)
@@ -118,8 +121,9 @@ class DataConverter:
             dmx_data[2] = self.z
             #print(f"DMX Data: {dmx_data}")
             #self.sender[universe].dmx_data = dmx_data
-            self.sender[universe].dmx_data = ( value )
-            #sender[universe].dmx_data = (int(map(self.x),0,255), int(map(self.y),0,255), int(map(self.z),0,255), 4)  # some test DMX data
+            #self.sender[universe].dmx_data = ( int(value) )
+            
+            sender[universe].dmx_data = (int(map(self.x),0,255), int(map(self.y),0,255), int(map(self.z),0,255), 4)  # some test DMX data
 
 
     def send_osc(self,  address, value,ip):
