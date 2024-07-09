@@ -140,9 +140,9 @@ class DataConverter:
 
     def send_osc(self,  address, value,ip):
         client = udp_client.SimpleUDPClient(ip, 5005) 
-        #print(ip)
+        print(ip)
         client.send_message(address, value)
-        #print(value)
+        print(address)
         if ip in self.osc_clients:
             self.osc_clients[ip].send_message(address, value)
 
