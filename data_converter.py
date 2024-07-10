@@ -26,6 +26,7 @@ class DataConverter:
     def load_config(self):
         with open(self.config_file, 'r') as f:
             config = json.load(f)
+            #print(config['mappings'])
             for mapping in config['mappings']:
                 self.add_mapping(
                     mapping['type'],
