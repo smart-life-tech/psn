@@ -51,7 +51,7 @@ class DataConverter:
         mapping = {
             'type': mapping_type,
             'psn_source': psn_source,
-            'server_name': server_name,
+            'server_name': psn_source,
             'tracker_id': tracker_id,
             'tracker_name': tracker_name,
             'axis': axis,
