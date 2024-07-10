@@ -67,7 +67,7 @@ class DataConverter:
             'osc_ip':osc_ip
         }
         self.mappings.append(mapping)
-        self.save_config()
+        #self.save_config()
 
     def save_config(self):
         with open(self.config_file, 'w') as f:
@@ -83,19 +83,21 @@ class DataConverter:
             for mapping in self.mappings:
                 if mapping['tracker_id'] == tracker_id: 
                     #psn_data_type = mapping['psn_data_type']
-                    value = 1#data.get(psn_data_type, None)
+                    value = data.get( mapping['psn_source'], None)
                     if value is not None:
-                        self.minpsn=mapping['psn_min']
-                        self.maxpsn=mapping['psn_max']
-                        self.mindmx=mapping['dmx_min']
-                        self.maxdmx=mapping['dmx_max']
-                        
-                        axis_value = psn_data[tracker_id].get(mapping['axis'], 0)
-                        scaled_value = self.scale_value(axis_value, mapping['psn_min'], mapping['psn_max'], mapping['osc_min'], mapping['osc_max'])
-                        self.send_dmx(mapping['sacn_universe'], mapping['sacn_addr'], scaled_value)
-                        self.send_osc(mapping['osc_ip'], self.x ,mapping['axis'])
-                        self.send_osc(mapping['osc_ip'], self.y,mapping['axis'] )
-                        self.send_osc(mapping['osc_ip'], self.z,mapping['axis'] )
+                        if value=='osc':
+                            self.minpsn=mapping['psn_min']
+                            self.maxpsn=mapping['psn_max']
+                            self.mindmx=mapping['dmx_min']
+                            self.maxdmx=mapping['dmx_max']
+                            
+                            axis_value = psn_data[tracker_id].get(mapping['axis'], 0)
+                            scaled_value = self.scale_value(axis_value, mapping['psn_min'], mapping['psn_max'], mapping['osc_min'], mapping['osc_max'])
+                            self.send_dmx(mapping['sacn_universe'], mapping['sacn_addr'], scaled_value)
+                        elif value=='sacn':
+                            self.send_osc(mapping['osc_ip'], self.x ,mapping['axis'])
+                            self.send_osc(mapping['osc_ip'], self.y,mapping['axis'] )
+                            self.send_osc(mapping['osc_ip'], self.z,mapping['axis'] )
                         #================================================================#
                         if tracker_id in psn_data:
                             axis_value = psn_data[tracker_id].get(mapping['axis'], 0)
