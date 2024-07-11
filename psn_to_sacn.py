@@ -1,9 +1,9 @@
 #! /bin/env python
 import sacn
 import pypsn
-
+prints=True
 # Simple forwarder of PSN to DMX. Turns all coordinates to positive ints...
-
+import time
 sender = sacn.sACNsender()
 
 
@@ -25,8 +25,12 @@ def stop_psn():
 
 def fill_dmx(psn_data):
     if isinstance(psn_data, pypsn.psn_data_packet):
+        if(prints):
+            print(psn_data)
+            prints=False
+            time.sleep(50)
         position = psn_data.trackers[0].pos
-        position2 = psn_data.trackers[2].pos
+        position2 = psn_data.trackers[0].accel
         dmx_data = [0] * 512
         dmx_data[0] = int(abs(position.x))
         dmx_data[1] = int(abs(position.y))
