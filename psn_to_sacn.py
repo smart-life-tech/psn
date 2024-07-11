@@ -27,7 +27,7 @@ def fill_dmx(psn_data):
     global prints
     if isinstance(psn_data, pypsn.psn_data_packet):
         if(prints):
-            print(psn_data.trackers)
+            print(psn_data.trackers[0])
             prints=False
             time.sleep(50)
         position = psn_data.trackers[0].pos
