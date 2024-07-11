@@ -39,7 +39,8 @@ def fill_dmx(psn_data):
         if(position.x>0):
             dmx_data[0]=512-int(abs(position.x))
             print("x position",position.x)
-            #print("y position : ",position.y)
+            print("y position : ",position.y)
+            print("z position : ",position.z)
         if(position2.y>0 ):
             dmx_data[1]=512-int(abs(position.y))
             print("y postion data====== : ",position2.y)
