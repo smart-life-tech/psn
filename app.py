@@ -117,7 +117,7 @@ def start():
                     }
                     print("psn data received ",psn_data)
                     data_converter.convert_data(psn_data)
-                    time.sleep(3)
+                    time.sleep(1)
             except Exception as e:
                 print(f"Error: {e}")
     threading.Thread(target=run).start()
