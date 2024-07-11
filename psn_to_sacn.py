@@ -24,6 +24,7 @@ def stop_psn():
 
 
 def fill_dmx(psn_data):
+    global prints
     if isinstance(psn_data, pypsn.psn_data_packet):
         if(prints):
             print(psn_data)
