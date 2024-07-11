@@ -1,7 +1,7 @@
 {
     "mappings": [
         {
-            "type": "sacn",
+            "type": "osc",
             "psn_source": "psn source",
             "server_name": "server name",
             "tracker_id": 1,
@@ -14,7 +14,7 @@
             "osc_addr": "adrress osc"
         },
         {
-            "type": "osc",
+            "type": "sacn",
             "psn_source": "psn source",
             "server_name": "server name",
             "tracker_id": 1,

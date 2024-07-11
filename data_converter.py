@@ -28,9 +28,24 @@ class DataConverter:
             config = json.load(f)
             #print(config['mappings'])
             for mapping in config['mappings']:
-                self.add_mapping(
+                if mapping['type'] == 'sacn':
+                    self.add_sacn_mapping(
                     mapping['type'],
-                    mapping.get('osc_ip',None),
+                    mapping['psn_source'],
+                    mapping['server_name'],
+                    mapping['tracker_id'],
+                    mapping['tracker_name'],
+                    mapping['axis'],
+                    mapping['psn_min'],
+                    mapping['psn_max'],
+                    mapping.get('dmx_min', None),
+                    mapping.get('dmx_max', None),
+                    mapping.get('sacn_universe', None),
+                    mapping.get('sacn_addr', None),  
+                )
+                elif mapping['type'] == 'osc':
+                    self.add_osc_mapping(
+                    mapping['type'],
                     mapping['psn_source'],
                     mapping['server_name'],
                     mapping['tracker_id'],
@@ -41,18 +56,13 @@ class DataConverter:
                     mapping.get('osc_min', None),
                     mapping.get('osc_max', None),
                     mapping.get('osc_addr', None),
-                    mapping.get('dmx_min', None),
-                    mapping.get('dmx_max', None),
-                    mapping.get('sacn_universe', None),
-                    mapping.get('sacn_addr', None),
-                    
                 )
 
-    def add_mapping(self, mapping_type,osc_ip, psn_source, server_name, tracker_id, tracker_name, axis, psn_min, psn_max, osc_min=None, osc_max=None, osc_addr=None, dmx_min=None, dmx_max=None, sacn_universe=None, sacn_addr=None):
+    def add_osc_mapping(self, type ,psn_source, server_name, tracker_id, tracker_name, axis, psn_min, psn_max, osc_min=None, osc_max=None, osc_addr=None):
         mapping = {
-            'type': mapping_type,
+            'type': type,
             'psn_source': psn_source,
-            'server_name': psn_source,
+            'server_name': server_name,
             'tracker_id': tracker_id,
             'tracker_name': tracker_name,
             'axis': axis,
@@ -60,15 +70,26 @@ class DataConverter:
             'psn_max': psn_max,
             'osc_min': osc_min,
             'osc_max': osc_max,
-            'osc_addr': osc_addr,
+            'osc_addr': osc_addr
+        }
+        self.mappings.append(mapping)
+    def add_sacn_mapping(self, type ,psn_source, server_name, tracker_id, tracker_name, axis, psn_min, psn_max, dmx_min=None, dmx_max=None, sacn_universe=None, sacn_addr=None):
+        mapping = {
+            'type': type,
+            'psn_source': psn_source,
+            'server_name': server_name,
+            'tracker_id': tracker_id,
+            'tracker_name': tracker_name,
+            'axis': axis,
+            'psn_min': psn_min,
+            'psn_max': psn_max,
             'dmx_min': dmx_min,
             'dmx_max': dmx_max,
             'sacn_universe': sacn_universe,
-            'sacn_addr': sacn_addr,
-            'osc_ip':osc_ip
+            'sacn_addr': sacn_addr
         }
         self.mappings.append(mapping)
-        #self.save_config()
+        
 
     def save_config(self):
         with open(self.config_file, 'w') as f:
@@ -76,15 +97,14 @@ class DataConverter:
 
     def convert_data(self, psn_data):
         for tracker_id, data in psn_data.items():
-            #print(f"Tracker ID: {tracker_id}")
             self.x=data['position']
             self.y=data['speed']
             self.z=data['orientation']
             print(f"Data: {data}")
             for mapping in self.mappings:
-                if mapping['tracker_id'] == tracker_id: 
+                if 1: 
                     #psn_data_type = mapping['psn_data_type']
-                    value = data.get( mapping['psn_source'], None)
+                    value = ( mapping['psn_source'], None)
                     if value is not None:
                         if value=='osc':
                             self.minpsn=mapping['psn_min']
