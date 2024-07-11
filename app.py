@@ -5,7 +5,7 @@ from data_converter import DataConverter
 import json
 import os
 import threading
-
+import time
 app = Flask(__name__)
 
 CONFIG_FILE = 'config.json'
@@ -115,8 +115,9 @@ def start():
                     psn_data = {
                         tracker_id: data
                     }
-                    #print(psn_data)
+                    print("psn data received ",psn_data)
                     data_converter.convert_data(psn_data)
+                    time.sleep(3)
             except Exception as e:
                 print(f"Error: {e}")
     threading.Thread(target=run).start()
