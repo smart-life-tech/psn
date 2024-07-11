@@ -107,6 +107,7 @@ class DataConverter:
                     value = ( mapping['psn_source'], None)
                     if value is not None:
                         if value=='osc':
+                            print(f"OSC: {mapping}")
                             self.minpsn=mapping['psn_min']
                             self.maxpsn=mapping['psn_max']
                             self.mindmx=mapping['dmx_min']
@@ -116,6 +117,7 @@ class DataConverter:
                             scaled_value = self.scale_value(axis_value, mapping['psn_min'], mapping['psn_max'], mapping['osc_min'], mapping['osc_max'])
                             self.send_dmx(mapping['sacn_universe'], mapping['sacn_addr'], scaled_value)
                         elif value=='sacn':
+                            print(f"SACN: {mapping}")
                             self.send_osc(mapping['osc_ip'], self.x ,mapping['axis'])
                             self.send_osc(mapping['osc_ip'], self.y,mapping['axis'] )
                             self.send_osc(mapping['osc_ip'], self.z,mapping['axis'] )
