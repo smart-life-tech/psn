@@ -59,7 +59,7 @@ class PSNReceiver:
                 # print("x position data3====== : ", position3.x)
                 # print("y position data3====== : ", position3.y)
                 # print("z position data3====== : ", position3.z)
-            position2 = psn_data.trackers[1].pos
+            position2 = psn_data.trackers[0].pos
             if position2.y > 0:
                 dmx_data[1] = 512 - int(abs(position.y))
                 #print("y postion data====== : ", position2.y)
