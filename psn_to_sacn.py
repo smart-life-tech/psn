@@ -25,12 +25,12 @@ def stop_psn():
 
 def fill_dmx(psn_data):
     global prints
+    time.sleep(5)
     if isinstance(psn_data, pypsn.psn_data_packet):
-        if(prints):
-            print(psn_data.trackers[0])
-            prints=False
-            time.sleep(50)
+            
         position = psn_data.trackers[0].pos
+        info=psn_data.trackers[0].info
+        
         position2 = psn_data.trackers[0].accel
         dmx_data = [0] * 512
         dmx_data[0] = int(abs(position.x))
@@ -41,6 +41,13 @@ def fill_dmx(psn_data):
         status= psn_data.trackers[0].status
         timestamp= psn_data.trackers[0].timestamp
         trgpos=psn_data.trackers[0].info
+        print("position : ",position)
+        print("speed : ",speed)
+        print("status : ",status)
+        print("timestamp : ",timestamp)
+        print("trgpos : ",trgpos)
+        print("position2 : ",position2)
+        print("info : ",info)
         if(position.x>0):
             dmx_data[0]=512-int(abs(position.x))
             print("x position",position.x)
