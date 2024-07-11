@@ -11,7 +11,7 @@
             "psn_max": 1.0,
             "osc_min": 7.0,
             "osc_max": 5.0,
-            "osc_addr": "adrress osc"
+            "osc_addr": "192.168.0.202"
         },
         {
             "type": "sacn",

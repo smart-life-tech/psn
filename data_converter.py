@@ -119,9 +119,9 @@ class DataConverter:
                             self.y = self.scale_value(self.y, mapping['psn_min'], mapping['psn_max'], mapping['osc_min'], mapping['osc_max'])
                             self.z = self.scale_value(self.z, mapping['psn_min'], mapping['psn_max'], mapping['osc_min'], mapping['osc_max'])
                             
-                            self.send_osc(mapping['osc_ip'], self.x ,mapping['axis'])
-                            self.send_osc(mapping['osc_ip'], self.y,mapping['axis'] )
-                            self.send_osc(mapping['osc_ip'], self.z,mapping['axis'] )
+                            self.send_osc(mapping['osc_addr'], self.x ,mapping['axis'])
+                            self.send_osc(mapping['osc_addr'], self.y,mapping['axis'] )
+                            self.send_osc(mapping['osc_addr'], self.z,mapping['axis'] )
                         elif value=='sacn':
                             print(f"SACN: {mapping}")
                             axis_value = psn_data[tracker_id].get(mapping['axis'], 0)
