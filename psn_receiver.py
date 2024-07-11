@@ -44,7 +44,7 @@ class PSNReceiver:
             dmx_data[0] = int(abs(position.x))
             dmx_data[1] = int(abs(position.y))
             dmx_data[2] = int(abs(position.z))
-            # print(position)
+            print(position)
             speed = psn_data.trackers[0].speed
             status = psn_data.trackers[0].status
             timestamp = psn_data.trackers[0].timestamp

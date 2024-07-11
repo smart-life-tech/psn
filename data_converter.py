@@ -125,7 +125,7 @@ class DataConverter:
                         elif value=='sacn':
                             #print(f"SACN: {mapping}")
                             axis_value = psn_data[tracker_id].get(mapping['axis'], 0)
-                            scaled_value = self.scale_value(axis_value, mapping['psn_min'], mapping['psn_max'], mapping['sacn_min'], mapping['sacn_max'])
+                            scaled_value = self.scale_value(axis_value, mapping['psn_min'], mapping['psn_max'], mapping['dmx_min'], mapping['dmx_max'])
                             self.send_dmx(mapping['sacn_universe'], mapping['sacn_addr'], scaled_value)
                         #================================================================#
                         if tracker_id in psn_data:
@@ -171,9 +171,9 @@ class DataConverter:
 
     def send_osc(self,  address, value,ip):
         client = udp_client.SimpleUDPClient("192.168.0.202", 5005) 
-        print("ip : ",ip)
+        #print("ip : ",ip)
         client.send_message(address, value)
-        print("address : ",address)
+        #print("address : ",address)
         #if ip in self.osc_clients:
             #self.osc_clients[ip].send_message(address, value)
 
