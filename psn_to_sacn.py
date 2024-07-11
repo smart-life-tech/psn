@@ -31,7 +31,7 @@ def fill_dmx(psn_data):
                 
             position = psn_data.trackers[0].pos
             position2 = psn_data.trackers[1].pos
-            position3 = psn_data.trackers[2].pos
+            position3 = psn_data.trackers[3].pos
             info=psn_data.trackers[0].info
             
             #position2 = psn_data.trackers[0].accel
