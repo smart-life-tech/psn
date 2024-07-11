@@ -82,7 +82,8 @@ class PSNReceiver:
         except Exception as e:
             print(e)
             print("Error in fill_dmx")
-            pass
+            #pass
+            
 
 if __name__ == "__main__":
     psn_receiver = PSNReceiver()
