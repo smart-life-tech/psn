@@ -115,9 +115,9 @@ class DataConverter:
                             self.maxdmx=mapping['osc_max']
                             
                             axis_value = psn_data[tracker_id].get(mapping['axis'], 0)
-                            self.x = self.scale_value(self.x, mapping['psn_min'], mapping['psn_max'], mapping['dmx_min'], mapping['dmx_max'])
-                            self.y = self.scale_value(self.y, mapping['psn_min'], mapping['psn_max'], mapping['dmx_min'], mapping['dmx_max'])
-                            self.z = self.scale_value(self.z, mapping['psn_min'], mapping['psn_max'], mapping['dmx_min'], mapping['dmx_max'])
+                            self.x = self.scale_value(self.x, mapping['psn_min'], mapping['psn_max'], mapping['osc_min'], mapping['osc_max'])
+                            self.y = self.scale_value(self.y, mapping['psn_min'], mapping['psn_max'], mapping['osc_min'], mapping['osc_max'])
+                            self.z = self.scale_value(self.z, mapping['psn_min'], mapping['psn_max'], mapping['osc_min'], mapping['osc_max'])
                             
                             self.send_osc(mapping['osc_ip'], self.x ,mapping['axis'])
                             self.send_osc(mapping['osc_ip'], self.y,mapping['axis'] )
