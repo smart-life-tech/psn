@@ -106,7 +106,7 @@ def add_sacn_mapping():
 @app.route('/start', methods=['POST'])
 def start():
     def run():
-        psn_receiver = PSNReceiver()
+        #psn_receiver = PSNReceiver()
         psn_receiver.start_psn()
         psn_receiver.start_dmx()
         while True:
