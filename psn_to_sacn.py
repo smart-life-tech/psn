@@ -31,6 +31,7 @@ def fill_dmx(psn_data):
                 
             position = psn_data.trackers[0].pos
             position2 = psn_data.trackers[1].pos
+            position3 = psn_data.trackers[2].pos
             info=psn_data.trackers[0].info
             
             #position2 = psn_data.trackers[0].accel
@@ -43,7 +44,9 @@ def fill_dmx(psn_data):
             status= psn_data.trackers[0].status
             timestamp= psn_data.trackers[0].timestamp
             trgpos=psn_data.trackers[0].info
+            print("position : ",position)
             print("position2 : ",position2)
+            print("position3 : ",position3)
             print("speed : ",speed)
             print("status : ",status)
             print("timestamp : ",timestamp)
