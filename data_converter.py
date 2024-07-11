@@ -104,7 +104,7 @@ class DataConverter:
             for mapping in self.mappings:
                 if 1: 
                     #psn_data_type = mapping['psn_data_type']
-                    value = ( mapping['type'], None)
+                    value = ( mapping['type'])
                     print(f"Value: {value}")
                     if value is not None:
                         if value=='osc':
