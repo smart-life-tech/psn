@@ -30,10 +30,10 @@ def fill_dmx(psn_data):
         if isinstance(psn_data, pypsn.psn_data_packet):
                 
             position = psn_data.trackers[0].pos
-            position = psn_data.trackers[1].pos
+            position2 = psn_data.trackers[1].pos
             info=psn_data.trackers[0].info
             
-            position2 = psn_data.trackers[0].accel
+            #position2 = psn_data.trackers[0].accel
             dmx_data = [0] * 512
             dmx_data[0] = int(abs(position.x))
             dmx_data[1] = int(abs(position.y))
