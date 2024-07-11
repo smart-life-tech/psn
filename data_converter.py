@@ -111,8 +111,8 @@ class DataConverter:
                             print(f"OSC: {mapping}")
                             self.minpsn=mapping['psn_min']
                             self.maxpsn=mapping['psn_max']
-                            self.mindmx=mapping['dmx_min']
-                            self.maxdmx=mapping['dmx_max']
+                            self.mindmx=mapping['osc_min']
+                            self.maxdmx=mapping['osc_max']
                             
                             axis_value = psn_data[tracker_id].get(mapping['axis'], 0)
                             scaled_value = self.scale_value(axis_value, mapping['psn_min'], mapping['psn_max'], mapping['osc_min'], mapping['osc_max'])
