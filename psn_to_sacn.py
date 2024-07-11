@@ -43,7 +43,7 @@ def fill_dmx(psn_data):
             status= psn_data.trackers[0].status
             timestamp= psn_data.trackers[0].timestamp
             trgpos=psn_data.trackers[0].info
-            print("position : ",position)
+            print("position2 : ",position2)
             print("speed : ",speed)
             print("status : ",status)
             print("timestamp : ",timestamp)
