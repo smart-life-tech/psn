@@ -35,53 +35,52 @@ class PSNReceiver:
         
     
     def fill_dmx(self, psn_data):
-        try:
-            if isinstance(psn_data, pypsn.psn_data_packet):
-                position = psn_data.trackers[0].pos
-               
-                #position3 = psn_data.trackers[2].pos
-                dmx_data = [0] * 512
-                dmx_data[0] = int(abs(position.x))
-                dmx_data[1] = int(abs(position.y))
-                dmx_data[2] = int(abs(position.z))
-                # print(position)
-                speed = psn_data.trackers[0].speed
-                status = psn_data.trackers[0].status
-                timestamp = psn_data.trackers[0].timestamp
-                trgpos = psn_data.trackers[0].info
-                if position.x > 0:
-                    dmx_data[0] = 512 - int(abs(position.x))
-                    #print("x position", position.x)
-                    self.x = position.x
-                    print("x position : ",position.x)
-                    print("y position : ",position.y)
-                    print("z position : ",position.z)
-                    
-                    # print("x position data3====== : ", position3.x)
-                    # print("y position data3====== : ", position3.y)
-                    # print("z position data3====== : ", position3.z)
-                position2 = psn_data.trackers[1].pos
-                if position2.y > 0:
-                    dmx_data[1] = 512 - int(abs(position.y))
-                    #print("y postion data====== : ", position2.y)
-                    self.y = position2.y
-                    print("x position data2====== : ", position2.x)
-                    print("y position data2====== : ", position2.y)
-                    print("z position data2====== : ", position2.z)
-                    # print("x postion data====== : ",position2.x)
-                # if position3.z > 0:
-                #     dmx_data[2] = 512 - int(abs(position.z))
-                #     #print(position.z)
-                #     self.z = position3.z
-                # print("postion : ",position)
-                # print("speed :" ,speed)
-                # print("status :" ,status)
-                # print("timestamp :" ,timestamp)
-                # print("trgpos :" ,trgpos)
-                # sender[1].dmx_data = dmx_data
-        except Exception as e:
-            print(e)
-            print("Error in fill_dmx")
+        if isinstance(psn_data, pypsn.psn_data_packet):
+            position = psn_data.trackers[0].pos
+            
+            #position3 = psn_data.trackers[2].pos
+            dmx_data = [0] * 512
+            dmx_data[0] = int(abs(position.x))
+            dmx_data[1] = int(abs(position.y))
+            dmx_data[2] = int(abs(position.z))
+            # print(position)
+            speed = psn_data.trackers[0].speed
+            status = psn_data.trackers[0].status
+            timestamp = psn_data.trackers[0].timestamp
+            trgpos = psn_data.trackers[0].info
+            if position.x > 0:
+                dmx_data[0] = 512 - int(abs(position.x))
+                #print("x position", position.x)
+                self.x = position.x
+                print("x position : ",position.x)
+                print("y position : ",position.y)
+                print("z position : ",position.z)
+                
+                # print("x position data3====== : ", position3.x)
+                # print("y position data3====== : ", position3.y)
+                # print("z position data3====== : ", position3.z)
+            position2 = psn_data.trackers[1].pos
+            if position2.y > 0:
+                dmx_data[1] = 512 - int(abs(position.y))
+                #print("y postion data====== : ", position2.y)
+                self.y = position2.y
+                print("x position data2====== : ", position2.x)
+                print("y position data2====== : ", position2.y)
+                print("z position data2====== : ", position2.z)
+                # print("x postion data====== : ",position2.x)
+            # if position3.z > 0:
+            #     dmx_data[2] = 512 - int(abs(position.z))
+            #     #print(position.z)
+            #     self.z = position3.z
+            # print("postion : ",position)
+            # print("speed :" ,speed)
+            # print("status :" ,status)
+            # print("timestamp :" ,timestamp)
+            # print("trgpos :" ,trgpos)
+            # sender[1].dmx_data = dmx_data
+        # except Exception as e:
+        #     print(e)
+        #     print("Error in fill_dmx")
             #pass
             
 
