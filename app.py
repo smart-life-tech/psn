@@ -106,11 +106,13 @@ def add_sacn_mapping():
 @app.route('/start', methods=['POST'])
 def start():
     def run():
+        psn_receiver = PSNReceiver()
         psn_receiver.start_psn()
         psn_receiver.start_dmx()
         while True:
             try:
                 tracker_id, data = psn_receiver.receive_data()
+                print("psn data received=== ",psn_data)
                 if tracker_id is not None:
                     psn_data = {
                         tracker_id: data
