@@ -100,12 +100,12 @@ class DataConverter:
             self.x=data['position']
             self.y=data['speed']
             self.z=data['orientation']
-            print(f"Data: {data}")
+            #print(f"Data: {data}")
             for mapping in self.mappings:
                 if 1: 
                     #psn_data_type = mapping['psn_data_type']
                     value = ( mapping['type'])
-                    print(f"Value: {value}")
+                    #print(f"Value: {value}")
                     if value is not None:
                         if value=='osc':
                             #print(f"OSC: {mapping}")
@@ -123,9 +123,9 @@ class DataConverter:
                             self.send_osc(mapping['osc_addr'], self.y,mapping['axis'] )
                             self.send_osc(mapping['osc_addr'], self.z,mapping['axis'] )
                         elif value=='sacn':
-                            print(f"SACN: {mapping}")
+                            #print(f"SACN: {mapping}")
                             axis_value = psn_data[tracker_id].get(mapping['axis'], 0)
-                            scaled_value = self.scale_value(axis_value, mapping['psn_min'], mapping['psn_max'], mapping['osc_min'], mapping['osc_max'])
+                            scaled_value = self.scale_value(axis_value, mapping['psn_min'], mapping['psn_max'], mapping['sacn_min'], mapping['sacn_max'])
                             self.send_dmx(mapping['sacn_universe'], mapping['sacn_addr'], scaled_value)
                         #================================================================#
                         if tracker_id in psn_data:
