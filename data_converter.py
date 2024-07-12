@@ -118,9 +118,9 @@ class DataConverter:
                             self.y = self.scale_value(self.y, mapping['psn_min'], mapping['psn_max'], mapping['osc_min'], mapping['osc_max'])
                             self.z = self.scale_value(self.z, mapping['psn_min'], mapping['psn_max'], mapping['osc_min'], mapping['osc_max'])
                             
-                            self.send_osc(mapping['osc_addr'], self.x ,mapping['axis'])
-                            self.send_osc(mapping['osc_addr'], self.y,mapping['axis'] )
-                            self.send_osc(mapping['osc_addr'], self.z,mapping['axis'] )
+                            self.send_osc(mapping['osc_addr'], self.x ,mapping['tracker_name'])
+                            self.send_osc(mapping['osc_addr'], self.y,mapping['tracker_name'] )
+                            self.send_osc(mapping['osc_addr'], self.z,mapping['tracker_name'] )
                         elif value=='sacn':
                             self.mindmx=mapping['dmx_min']
                             self.maxdmx=mapping['dmx_max']
@@ -179,7 +179,7 @@ class DataConverter:
     def send_osc(self,  address, value,ip):
         client = udp_client.SimpleUDPClient("192.168.0.202", 5005) 
         #print("ip : ",ip)
-        client.send_message(address, value)
+        client.send_message(ip, value)
         #print("address : ",address)
         #if ip in self.osc_clients:
             #self.osc_clients[ip].send_message(address, value)
