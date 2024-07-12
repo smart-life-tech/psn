@@ -170,10 +170,11 @@ class DataConverter:
             outputx = self.scale_value(self.x, self.minpsn, self.maxpsn, self.mindmx,self.maxdmx)
             outputy = self.scale_value(self.y, self.minpsn, self.maxpsn, self.mindmx,self.maxdmx)
             outputz = self.scale_value(self.z, self.minpsn, self.maxpsn, self.mindmx,self.maxdmx)
-            sender[universe].dmx_data = (int(outputx), int(outputy), int(outputz), 4)  # some test DMX data
             print("after mapping output x",outputx)
             print("after mapping output y",outputy)
             print("after mapping output z",outputz)
+            sender[universe].dmx_data = (int(outputx), int(outputy), int(outputz), 4)  # some test DMX data
+            
 
     def send_osc(self,  address, value,ip):
         client = udp_client.SimpleUDPClient("192.168.0.202", 5005) 
