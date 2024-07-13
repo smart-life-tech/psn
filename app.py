@@ -112,7 +112,7 @@ def start():
         while True:
             try:
                 tracker_id, data = psn_receiver.receive_data()
-                print("psn data received=== ",data)
+                print("psn data received=== ", data)
                 if tracker_id is not None:
                     psn_data = {
                         tracker_id: data
