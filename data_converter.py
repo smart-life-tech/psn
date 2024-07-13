@@ -113,20 +113,22 @@ class DataConverter:
                             self.maxpsn=mapping['psn_max']
                             
                             
-                            axis_value = psn_data[tracker_id].get(mapping['axis'], 0)
-                            self.x = self.scale_value(self.x, mapping['psn_min'], mapping['psn_max'], mapping['osc_min'], mapping['osc_max'])
-                            self.y = self.scale_value(self.y, mapping['psn_min'], mapping['psn_max'], mapping['osc_min'], mapping['osc_max'])
-                            self.z = self.scale_value(self.z, mapping['psn_min'], mapping['psn_max'], mapping['osc_min'], mapping['osc_max'])
-                            
-                            self.send_osc(mapping['osc_addr'], self.x ,mapping['tracker_name'])
-                            self.send_osc(mapping['osc_addr'], self.y,mapping['tracker_name'] )
-                            self.send_osc(mapping['osc_addr'], self.z,mapping['tracker_name'] )
+                            axis_value = mapping['axis'].upper()
+                            if axis_value == 'X':
+                                self.x = self.scale_value(self.x, mapping['psn_min'], mapping['psn_max'], mapping['osc_min'], mapping['osc_max'])
+                                self.send_osc(mapping['osc_addr'], self.x ,mapping['tracker_name'])
+                            elif axis_value=='Y':
+                                self.y = self.scale_value(self.y, mapping['psn_min'], mapping['psn_max'], mapping['osc_min'], mapping['osc_max'])
+                                self.send_osc(mapping['osc_addr'], self.y,mapping['tracker_name'] )
+                            elif axis_value=='Z':
+                                self.z = self.scale_value(self.z, mapping['psn_min'], mapping['psn_max'], mapping['osc_min'], mapping['osc_max'])
+                                self.send_osc(mapping['osc_addr'], self.z,mapping['tracker_name'] )
                         elif value=='sacn':
                             self.mindmx=mapping['dmx_min']
                             self.maxdmx=mapping['dmx_max']
                             axis_value = psn_data[tracker_id].get(mapping['axis'], 0)
                             scaled_value = self.scale_value(axis_value, mapping['psn_min'], mapping['psn_max'], mapping['dmx_min'], mapping['dmx_max'])
-                            self.send_dmx(mapping['sacn_universe'], mapping['sacn_addr'], scaled_value)
+                            self.send_dmx(mapping['sacn_universe'], mapping['sacn_addr'], mapping['axis'])
                         #================================================================#
                         if tracker_id in psn_data:
                             axis_value = psn_data[tracker_id].get(mapping['axis'], 0)
@@ -150,6 +152,7 @@ class DataConverter:
     def send_dmx(self, universe, address, value):
         self.sender.activate_output(universe)
         self.sender[universe].multicast = True
+        value=value.upper()
         dmx_data = [0] * 512
         if 0 <= address < 512:
             #dmx_data[address] = value if 0 <= value < 256 else 0  # Ensure value is a valid byte
@@ -163,22 +166,28 @@ class DataConverter:
             #print(f"DMX Data: {dmx_data}")
             #self.sender[universe].dmx_data = dmx_data
             #self.sender[universe].dmx_data = ( int(value) )
-            print("before mapping output x",self.x)
-            print("before mapping output y",self.y)
-            print("before mapping output z",self.z)
-            
-            outputx = self.scale_value(self.x, self.minpsn, self.maxpsn, self.mindmx,self.maxdmx)
-            outputy = self.scale_value(self.y, self.minpsn, self.maxpsn, self.mindmx,self.maxdmx)
-            outputz = self.scale_value(self.z, self.minpsn, self.maxpsn, self.mindmx,self.maxdmx)
-            print("after mapping output x",outputx)
-            print("after mapping output y",outputy)
-            print("after mapping output z",outputz)
-            sender[universe].dmx_data = (int(outputx), int(outputy), int(outputz), 4)  # some test DMX data
+            # print("before mapping output x",self.x)
+            # print("before mapping output y",self.y)
+            # print("before mapping output z",self.z)
+        
+            # print("after mapping output x",outputx)
+            # print("after mapping output y",outputy)
+            # print("after mapping output z",outputz)
+            if value == 'X':
+                outputx = self.scale_value(self.x, self.minpsn, self.maxpsn, self.mindmx,self.maxdmx)
+                sender[universe].dmx_data = (int(outputx))
+            elif value == 'Y':
+                outputy = self.scale_value(self.y, self.minpsn, self.maxpsn, self.mindmx,self.maxdmx)
+                sender[universe].dmx_data = (int(outputy))
+            elif value == 'Z':
+                outputz = self.scale_value(self.z, self.minpsn, self.maxpsn, self.mindmx,self.maxdmx)
+                sender[universe].dmx_data = (int(outputz))
+            #sender[universe].dmx_data = (int(outputx), int(outputy), int(outputz), 4)  # some test DMX data
             
 
     def send_osc(self,  address, value,ip):
-        client = udp_client.SimpleUDPClient("192.168.0.202", 5005) 
-        #print("ip : ",ip)
+        client = udp_client.SimpleUDPClient(address, 5005) 
+        print("address : ",address)
         client.send_message(ip, value)
         #print("address : ",address)
         #if ip in self.osc_clients:

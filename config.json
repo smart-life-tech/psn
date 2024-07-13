@@ -6,7 +6,7 @@
             "server_name": "server name",
             "tracker_id": 1,
             "tracker_name": "tracker_1_pos_x",
-            "axis": "axis b",
+            "axis": "X",
             "psn_min": 0.0,
             "psn_max": 240.0,
             "osc_min": 0.0,
