@@ -175,13 +175,13 @@ class DataConverter:
             # print("after mapping output z",outputz)
             if value == 'X':
                 outputx = self.scale_value(self.x, self.minpsn, self.maxpsn, self.mindmx,self.maxdmx)
-                sender[universe].dmx_data = (int(outputx))
+                sender[universe].dmx_data = (int(outputx),)
             elif value == 'Y':
                 outputy = self.scale_value(self.y, self.minpsn, self.maxpsn, self.mindmx,self.maxdmx)
-                sender[universe].dmx_data = (int(outputy))
+                sender[universe].dmx_data = (0,int(outputy),)
             elif value == 'Z':
                 outputz = self.scale_value(self.z, self.minpsn, self.maxpsn, self.mindmx,self.maxdmx)
-                sender[universe].dmx_data = (int(outputz))
+                sender[universe].dmx_data = (0,0,int(outputz),)
             #sender[universe].dmx_data = (int(outputx), int(outputy), int(outputz), 4)  # some test DMX data
             
 
