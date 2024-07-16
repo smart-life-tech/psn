@@ -1,0 +1,38 @@
+/* styles.css */
+
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+}
+
+form {
+    margin-bottom: 20px;
+}
+
+h1, h2 {
+    color: #333;
+}
+
+button {
+    padding: 10px;
+    margin-top: 10px;
+}
+
+input[type="text"], input[type="number"], select {
+    width: 200px;
+    margin-bottom: 10px;
+}
+
+#startButton, #stopButton {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+}
+
+#startButton:hover, #stopButton:hover {
+    background-color: #45a049;
+}
+
+#startButton:active, #stopButton:active {
+    background-color: #3e8e41;
+}
