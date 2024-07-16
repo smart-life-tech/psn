@@ -26,6 +26,19 @@
             "dmx_max": 66,
             "sacn_universe": 68,
             "sacn_addr": 0
+        },
+        {
+            "type": "osc",
+            "psn_source": "psn source",
+            "server_name": "server name",
+            "tracker_id": 8,
+            "tracker_name": "tracker name",
+            "axis": "Y",
+            "psn_min": 8.0,
+            "psn_max": 8.0,
+            "osc_min": 88.0,
+            "osc_max": 8.0,
+            "osc_addr": "192.168.0.202"
         }
     ],
     "psn_ip": "5555",

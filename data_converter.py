@@ -108,15 +108,16 @@ class DataConverter:
                 if 1: 
                     #psn_data_type = mapping['psn_data_type']
                     value = ( mapping['type'])
-                    #print(f"Value: {value}")
+                    print(f"Value: {value}")
                     if value is not None:
                         if value=='osc':
-                            #print(f"OSC: {mapping}")
+                            print(f"OSC: {mapping}")
                             self.minpsn=mapping['psn_min']
                             self.maxpsn=mapping['psn_max']
                             
                             
                             axis_value = mapping['axis'].upper()
+                            print(f"axis Value: {axis_value}")
                             if axis_value == 'X':
                                 self.x = self.scale_value(self.x, mapping['psn_min'], mapping['psn_max'], mapping['osc_min'], mapping['osc_max'])
                                 self.send_osc(mapping['osc_addr'], self.x ,mapping['tracker_name'])
