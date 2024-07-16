@@ -94,7 +94,10 @@ class DataConverter:
     def save_config(self):
         with open(self.config_file, 'w') as f:
             json.dump({"mappings": self.mappings}, f)
-
+            
+    def remove_mapping(self, index):
+        if 0 <= index < len(self.mappings):
+            self.mappings.pop(index)
     def convert_data(self, psn_data):
         for tracker_id, data in psn_data.items():
             self.x=data['position']

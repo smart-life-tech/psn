@@ -1,88 +1,179 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PSN to SACN/OSC Converter</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+
+        h1,
+        h2 {
+            color: #343a40;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .btn {
+            margin-top: 10px;
+        }
+    </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
+
 <body>
-    <h1>PSN to SACN/OSC Converter</h1>
+    <div class="container">
+        <h1>PSN to SACN/OSC Converter</h1>
 
-    <h2>Configuration</h2>
-    <form id="configForm">
-        PSN IP: <input type="text" name="psn_ip" value="{{ config['psn_ip'] }}"><br>
-        PSN Port: <input type="text" name="psn_port" value="{{ config['psn_port'] }}"><br>
-        <button type="submit">Save Configuration</button>
-    </form>
+        <h2>Configuration</h2>
+        <form id="configForm" class="form-inline">
+            <div class="form-group">
+                <label for="psn_ip">PSN IP:</label>
+                <input type="text" class="form-control ml-2" name="psn_ip" value="{{ config['psn_ip'] }}">
+            </div>
+            <div class="form-group ml-3">
+                <label for="psn_port">PSN Port:</label>
+                <input type="text" class="form-control ml-2" name="psn_port" value="{{ config['psn_port'] }}">
+            </div>
+            <button type="submit" class="btn btn-primary ml-3">Save Configuration</button>
+        </form>
 
-    <h2>Add OSC Mapping</h2>
-    <form id="oscMappingForm">
-        PSN Source: <input type="text" name="psn_source"><br>
-        Server Name: <input type="text" name="server_name"><br>
-        Tracker ID: <input type="number" name="tracker_id"><br>
-        Tracker Name: <input type="text" name="tracker_name"><br>
-        Axis: <input type="text" name="axis"><br>
-        PSN Min: <input type="number" name="psn_min"><br>
-        PSN Max: <input type="number" name="psn_max"><br>
-        OSC Min: <input type="number" name="osc_min"><br>
-        OSC Max: <input type="number" name="osc_max"><br>
-        OSC Addr: <input type="text" name="osc_addr"><br>
-        <button type="submit">Add OSC Mapping</button>
-    </form>
+        <h2>Add Mapping</h2>
+        <form id="mappingForm">
+            <div class="form-group">
+                <label for="mapping_type">Mapping Type:</label>
+                <select class="form-control ml-2" name="mapping_type" id="mapping_type">
+                    <option value="osc">OSC</option>
+                    <option value="sacn">sACN</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="tracker_id">Tracker ID:</label>
+                <input type="number" class="form-control ml-2" name="tracker_id">
+            </div>
+            <div class="form-group">
+                <label for="tracker_name">Tracker Name:</label>
+                <input type="text" class="form-control ml-2" name="tracker_name" readonly>
+            </div>
+            <div class="form-group">
+                <label for="axis">Axis:</label>
+                <select class="form-control ml-2" name="axis">
+                    <option value="X">X</option>
+                    <option value="Y">Y</option>
+                    <option value="Z">Z</option>
+                </select>
+            </div>
+            <div id="osc_fields">
+                <div class="form-group">
+                    <label for="psn_min">PSN Min:</label>
+                    <input type="number" class="form-control ml-2" name="psn_min">
+                </div>
+                <div class="form-group">
+                    <label for="psn_max">PSN Max:</label>
+                    <input type="number" class="form-control ml-2" name="psn_max">
+                </div>
+                <div class="form-group">
+                    <label for="osc_min">OSC Min:</label>
+                    <input type="number" class="form-control ml-2" name="osc_min">
+                </div>
+                <div class="form-group">
+                    <label for="osc_max">OSC Max:</label>
+                    <input type="number" class="form-control ml-2" name="osc_max">
+                </div>
+                <div class="form-group">
+                    <label for="osc_addr">OSC Address:</label>
+                    <input type="text" class="form-control ml-2" name="osc_addr">
+                </div>
+            </div>
+            <div id="sacn_fields" style="display: none;">
+                <div class="form-group">
+                    <label for="psn_min">PSN Min:</label>
+                    <input type="number" class="form-control ml-2" name="psn_min">
+                </div>
+                <div class="form-group">
+                    <label for="psn_max">PSN Max:</label>
+                    <input type="number" class="form-control ml-2" name="psn_max">
+                </div>
+                <div class="form-group">
+                    <label for="dmx_min">DMX Min:</label>
+                    <input type="number" class="form-control ml-2" name="dmx_min">
+                </div>
+                <div class="form-group">
+                    <label for="dmx_max">DMX Max:</label>
+                    <input type="number" class="form-control ml-2" name="dmx_max">
+                </div>
+                <div class="form-group">
+                    <label for="sacn_universe">sACN Universe:</label>
+                    <input type="number" class="form-control ml-2" name="sacn_universe">
+                </div>
+                <div class="form-group">
+                    <label for="sacn_addr">sACN Address:</label>
+                    <input type="number" class="form-control ml-2" name="sacn_addr">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-success">Add Mapping</button>
+        </form>
 
-    <h2>Add SACN Mapping</h2>
-    <form id="sacnMappingForm">
-        PSN Source: <input type="text" name="psn_source"><br>
-        Server Name: <input type="text" name="server_name"><br>
-        Tracker ID: <input type="number" name="tracker_id"><br>
-        Tracker Name: <input type="text" name="tracker_name"><br>
-        Axis: <input type="text" name="axis"><br>
-        PSN Min: <input type="number" name="psn_min"><br>
-        PSN Max: <input type="number" name="psn_max"><br>
-        DMX Min: <input type="number" name="dmx_min"><br>
-        DMX Max: <input type="number" name="dmx_max"><br>
-        SACN Universe: <input type="number" name="sacn_universe"><br>
-        SACN Addr: <input type="number" name="sacn_addr"><br>
-        <button type="submit">Add SACN Mapping</button>
-    </form>
+        <button id="startButton" class="btn btn-primary">Start Conversion</button>
+        <button id="stopButton" class="btn btn-danger">Stop Conversion</button>
 
-    <button id="startButton">Start Conversion</button>
-    <button id="stopButton">Stop Conversion</button>
+        <script>
+            $(document).ready(function () {
+                function toggleMappingFields() {
+                    var mappingType = $('#mapping_type').val();
+                    if (mappingType === 'osc') {
+                        $('#osc_fields').show();
+                        $('#sacn_fields').hide();
+                    } else {
+                        $('#osc_fields').hide();
+                        $('#sacn_fields').show();
+                    }
+                }
 
-    <script>
-        $(document).ready(function() {
-            $('#configForm').submit(function(event) {
-                event.preventDefault();
-                $.post('/configure', $(this).serialize(), function(response) {
-                    alert(response);
+                $('#mapping_type').change(toggleMappingFields);
+                toggleMappingFields();
+
+                $('#configForm').submit(function (event) {
+                    event.preventDefault();
+                    $.post('/configure', $(this).serialize(), function (response) {
+                        alert(response);
+                    });
+                });
+
+                $('#mappingForm').submit(function (event) {
+                    event.preventDefault();
+                    $.post('/add_mapping', $(this).serialize(), function (response) {
+                        alert(response);
+                    });
+                });
+
+                $('#startButton').click(function () {
+                    $.post('/start', function (response) {
+                        alert(response);
+                    });
+                });
+
+                $('#stopButton').click(function () {
+                    $.post('/stop', function (response) {
+                        alert(response);
+                    });
                 });
             });
-
-            $('#oscMappingForm').submit(function(event) {
-                event.preventDefault();
-                $.post('/add_osc_mapping', $(this).serialize(), function(response) {
-                    alert(response);
-                });
-            });
-
-            $('#sacnMappingForm').submit(function(event) {
-                event.preventDefault();
-                $.post('/add_sacn_mapping', $(this).serialize(), function(response) {
-                    alert(response);
-                });
-            });
-
-            $('#startButton').click(function() {
-                $.post('/start', function(response) {
-                    alert(response);
-                });
-            });
-
-            $('#stopButton').click(function() {
-                $.post('/stop', function(response) {
-                    alert(response);
-                });
-            });
-        });
-    </script>
+        </script>
+    </div>
 </body>
+
 </html>

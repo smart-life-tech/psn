@@ -102,7 +102,19 @@ def add_sacn_mapping():
         mapping['sacn_addr']
     )
     return jsonify('SACN Mapping added')
+@app.route('/mappings', methods=['GET'])
+def get_mappings():
+    return jsonify({'mappings': config['mappings']})
 
+@app.route('/delete_mapping/<int:index>', methods=['DELETE'])
+def delete_mapping(index):
+    try:
+        del config['mappings'][index]
+        save_config(config)
+        data_converter.remove_mapping(index)
+        return jsonify('Mapping deleted')
+    except IndexError:
+        return jsonify('Mapping not found'), 404
 @app.route('/start', methods=['POST'])
 def start():
     def run():
