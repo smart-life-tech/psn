@@ -179,6 +179,8 @@ class DataConverter:
             # print("after mapping output z",outputz)
             if value == 'X':
                 outputx = self.scale_value(self.x, self.minpsn, self.maxpsn, self.mindmx,self.maxdmx)
+                outputy = self.scale_value(self.y, self.minpsn, self.maxpsn, self.mindmx,self.maxdmx)
+                outputz = self.scale_value(self.z, self.minpsn, self.maxpsn, self.mindmx,self.maxdmx)
                 print("after mapping output x",outputx)
                 sender[universe].dmx_data = (int(outputx),int(outputy),int(outputz))
             elif value == 'Y':
