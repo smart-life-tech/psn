@@ -180,7 +180,7 @@ class DataConverter:
             if value == 'X':
                 outputx = self.scale_value(self.x, self.minpsn, self.maxpsn, self.mindmx,self.maxdmx)
                 print("after mapping output x",outputx)
-                sender[universe].dmx_data = (int(outputx),)
+                sender[universe].dmx_data = (int(outputx),int(outputy),int(outputz))
             elif value == 'Y':
                 outputy = self.scale_value(self.y, self.minpsn, self.maxpsn, self.mindmx,self.maxdmx)
                 sender[universe].dmx_data = (0,int(outputy),)
