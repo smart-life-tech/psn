@@ -130,18 +130,12 @@ class DataConverter:
                         elif value=='sacn':
                             self.mindmx=mapping['dmx_min']
                             self.maxdmx=mapping['dmx_max']
+                            self.minpsn=mapping['psn_min']
+                            self.maxpsn=mapping['psn_max']
+                            
                             axis_value = psn_data[tracker_id].get(mapping['axis'], 0)
                             #scaled_value = self.scale_value(axis_value, mapping['psn_min'], mapping['psn_max'], mapping['dmx_min'], mapping['dmx_max'])
                             self.send_dmx(mapping['sacn_universe'], mapping['sacn_addr'], mapping['axis'])
-                        #================================================================#
-                        if tracker_id in psn_data:
-                            axis_value = psn_data[tracker_id].get(mapping['axis'], 0)
-                            if mapping['type'] == 'osc':
-                                output_value = self.scale_value(axis_value, mapping['psn_min'], mapping['psn_max'], mapping['osc_min'], mapping['osc_max'])
-                                #self.send_osc(mapping['osc_addr'], output_value, mapping['server_name'])
-                            elif mapping['type'] == 'sacn':
-                                #output_value = self.scale_value(axis_value, mapping['psn_min'], mapping['psn_max'], mapping['dmx_min'], mapping['dmx_max'])
-                                self.send_dmx(mapping['sacn_universe'], mapping['sacn_addr'], output_value)
                     else:
                         print(f"Field   not found in data: {data}")
                 else:
@@ -178,6 +172,7 @@ class DataConverter:
             # print("after mapping output y",outputy)
             # print("after mapping output z",outputz)
             if value == 'X':
+                
                 outputx = self.scale_value(self.x, self.minpsn, self.maxpsn, self.mindmx,self.maxdmx)
                 if self.y > 0:
                     outputy = self.scale_value(self.y, self.minpsn, self.maxpsn, self.mindmx,self.maxdmx)
