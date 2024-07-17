@@ -184,10 +184,10 @@ class DataConverter:
                 sender[universe].dmx_data = (int(outputx),)#int(outputy),int(outputz))
             elif value == 'Y':
                 outputy = self.scale_value(self.y, self.minpsn, self.maxpsn, self.mindmx,self.maxdmx)
-                sender[universe].dmx_data[1] = (int(outputy))
+                sender[universe].dmx_data[1] = (int(outputy),)
             elif value == 'Z':
                 outputz = self.scale_value(self.z, self.minpsn, self.maxpsn, self.mindmx,self.maxdmx)
-                sender[universe].dmx_data[2] = (int(outputz))
+                sender[universe].dmx_data[2] = (int(outputz),)
             #sender[universe].dmx_data = (int(outputx), int(outputy), int(outputz), 4)  # some test DMX data
             
 
