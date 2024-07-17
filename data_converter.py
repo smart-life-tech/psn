@@ -131,7 +131,7 @@ class DataConverter:
                             self.mindmx=mapping['dmx_min']
                             self.maxdmx=mapping['dmx_max']
                             axis_value = psn_data[tracker_id].get(mapping['axis'], 0)
-                            scaled_value = self.scale_value(axis_value, mapping['psn_min'], mapping['psn_max'], mapping['dmx_min'], mapping['dmx_max'])
+                            #scaled_value = self.scale_value(axis_value, mapping['psn_min'], mapping['psn_max'], mapping['dmx_min'], mapping['dmx_max'])
                             self.send_dmx(mapping['sacn_universe'], mapping['sacn_addr'], mapping['axis'])
                         #================================================================#
                         if tracker_id in psn_data:
