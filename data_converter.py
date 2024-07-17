@@ -161,11 +161,6 @@ class DataConverter:
             dmx_data[0] =  self.x
             dmx_data[1] = self.y
             dmx_data[2] = self.z
-            # Initialize a DMX data packet with zeros
-            dmx_packet = [0] * 512  # DMX512 has 512 channels
-            # Update the value at index 3 (4th position, since index starts at 0)
-            
-
             #print(f"DMX Data: {dmx_data}")
             #self.sender[universe].dmx_data = dmx_data
             #self.sender[universe].dmx_data = ( int(value) )
@@ -179,24 +174,20 @@ class DataConverter:
             if value == 'X':
                 
                 outputx = self.scale_value(self.x, self.minpsn, self.maxpsn, self.mindmx,self.maxdmx)
-                # if self.y > 0:
-                #     outputy = self.scale_value(self.y, self.minpsn, self.maxpsn, self.mindmx,self.maxdmx)
-                # if self.z > 0:
-                #     outputz = self.scale_value(self.z, self.minpsn, self.maxpsn, self.mindmx,self.maxdmx)
-                # else :
-                #     outputz = 0
-                dmx_packet[0] = outputx
-                sender[universe].dmx_data = (dmx_packet)#int(outputy),int(outputz))
+                if self.y > 0:
+                    outputy = self.scale_value(self.y, self.minpsn, self.maxpsn, self.mindmx,self.maxdmx)
+                if self.z > 0:
+                    outputz = self.scale_value(self.z, self.minpsn, self.maxpsn, self.mindmx,self.maxdmx)
+                else :
+                    outputz = 0
+                print("after mapping output x",outputx)
+                sender[universe].dmx_data = (int(outputx),)#int(outputy),int(outputz))
             elif value == 'Y':
                 outputy = self.scale_value(self.y, self.minpsn, self.maxpsn, self.mindmx,self.maxdmx)
-                #sender[universe].dmx_data = (int(outputy),)
-                dmx_packet[1] = outputy
-                sender[universe].dmx_data = (dmx_packet)#int(outputy),int(outputz))
+                sender[universe].dmx_data = (0,int(outputy),)
             elif value == 'Z':
                 outputz = self.scale_value(self.z, self.minpsn, self.maxpsn, self.mindmx,self.maxdmx)
-                #sender[universe].dmx_data[2] = (int(outputz),)
-                dmx_packet[2] = outputz
-                sender[universe].dmx_data = (dmx_packet)#int(outputy),int(outputz))
+                sender[universe].dmx_data = (0,0,int(outputz),)
             #sender[universe].dmx_data = (int(outputx), int(outputy), int(outputz), 4)  # some test DMX data
             
 
