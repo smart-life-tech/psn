@@ -1,5 +1,21 @@
 import sacn
 import pypsn
+import os
+import json
+from data_converter import DataConverter
+CONFIG_FILE = 'config.json'
+def load_config():
+    if os.path.exists(CONFIG_FILE):
+        with open(CONFIG_FILE, 'r') as f:
+            return json.load(f)
+    return {
+        'psn_ip': '0.0.0.0',
+        'psn_port': 56565,
+        'psn_multicast_ip': '236.10.10.10',
+        'mappings': []
+    }
+config = load_config()
+data_converter = DataConverter(CONFIG_FILE)
 toggle = False
 # Simple forwarder of PSN to DMX. Turns all coordinates to positive ints...
 class PSNReceiver:
@@ -36,7 +52,11 @@ class PSNReceiver:
     
     def fill_dmx(self, psn_data):
         global toggle
+        pos=[0]*512
         if isinstance(psn_data, pypsn.psn_data_packet):
+            # for i, mapping in config['mappings']:
+            #     if mapping['type'] == 'sacn' or mapping['type'] == 'osc':
+            #         pos[i]=mapping['tracker_id']
             position = psn_data.trackers[0].pos
             
             #position3 = psn_data.trackers[2].pos
