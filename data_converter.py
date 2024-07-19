@@ -21,6 +21,9 @@ class DataConverter:
         self.maxdmx=0
         self.minpsn=0
         self.maxpsn=0
+        self.activatex=0
+        self.activatey=0
+        self.activatez=0
         
 
     def load_config(self):
@@ -134,6 +137,14 @@ class DataConverter:
                             self.maxpsn=mapping['psn_max']
                             
                             axis_value = psn_data[tracker_id].get(mapping['axis'], 0)
+                            
+                            if mapping['axis'] == 'X':
+                                self.activatex=1
+                            elif mapping['axis'] == 'Y':
+                                self.activatey=1
+                            elif mapping['axis'] == 'Z':
+                                    self.activatez=1
+                                    
                             #scaled_value = self.scale_value(axis_value, mapping['psn_min'], mapping['psn_max'], mapping['dmx_min'], mapping['dmx_max'])
                             self.send_dmx(mapping['sacn_universe'], mapping['sacn_addr'], mapping['axis'])
                     else:
@@ -171,23 +182,29 @@ class DataConverter:
             # print("after mapping output x",outputx)
             # print("after mapping output y",outputy)
             # print("after mapping output z",outputz)
-            if value == 'X':
-                
+            if self.activatex == 1:
                 outputx = self.scale_value(self.x, self.minpsn, self.maxpsn, self.mindmx,self.maxdmx)
-                if self.y > 0:
-                    outputy = self.scale_value(self.y, self.minpsn, self.maxpsn, self.mindmx,self.maxdmx)
-                if self.z > 0:
-                    outputz = self.scale_value(self.z, self.minpsn, self.maxpsn, self.mindmx,self.maxdmx)
-                else :
-                    outputz = 0
-                print("after mapping output x",outputx)
-                sender[universe].dmx_data = (int(outputx),)#int(outputy),int(outputz))
-            elif value == 'Y':
+            else :
+                outputx = 0
+                    
+            if self.activatey == 1:
                 outputy = self.scale_value(self.y, self.minpsn, self.maxpsn, self.mindmx,self.maxdmx)
-                sender[universe].dmx_data = (0,int(outputy),)
-            elif value == 'Z':
+            else :
+                outputy = 0
+                    
+            if self.activatez == 1:
                 outputz = self.scale_value(self.z, self.minpsn, self.maxpsn, self.mindmx,self.maxdmx)
-                sender[universe].dmx_data = (0,0,int(outputz),)
+            else :
+                outputz = 0
+            print("after mapping output x",outputx)
+            
+            sender[universe].dmx_data = (int(outputx),int(outputy),int(outputz))
+            # if value == 'Y':
+            #     outputy = self.scale_value(self.y, self.minpsn, self.maxpsn, self.mindmx,self.maxdmx)
+            #     #sender[universe].dmx_data = (0,int(outputy),)
+            # elif value == 'Z':
+            #     outputz = self.scale_value(self.z, self.minpsn, self.maxpsn, self.mindmx,self.maxdmx)
+                #sender[universe].dmx_data = (0,0,int(outputz),)
             #sender[universe].dmx_data = (int(outputx), int(outputy), int(outputz), 4)  # some test DMX data
             
 

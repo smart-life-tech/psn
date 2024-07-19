@@ -54,9 +54,6 @@ class PSNReceiver:
         global toggle
         pos=[0]*512
         if isinstance(psn_data, pypsn.psn_data_packet):
-            # for i, mapping in config['mappings']:
-            #     if mapping['type'] == 'sacn' or mapping['type'] == 'osc':
-            #         pos[i]=mapping['tracker_id']
             position = psn_data.trackers[0].pos
             
             #position3 = psn_data.trackers[2].pos
