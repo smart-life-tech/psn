@@ -40,7 +40,7 @@ class PSNReceiver:
         pypsn.receiver(self.fill_dmx).stop()
 
     def receive_data(self):
-        # Here you would implement the logic to receive and parse the PSN data
+        # Here you would implement the logic to receive and parse the PSN data to be tested
         # This is a placeholder implementation and should be replaced with actual logic
         #return self.id,self.x, self.y, self.z i already removed the x y and z data from the tracker postions
         tracker_id = 1  # replace with actual tracker_id extraction logic
