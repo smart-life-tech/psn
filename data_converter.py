@@ -197,7 +197,7 @@ class DataConverter:
             else :
                 outputz = 0
             print("after mapping output x",outputx)
-            
+            # i need to use address to sort this out
             sender[universe].dmx_data = (int(outputx),int(outputy),int(outputz))
             # if value == 'Y':
             #     outputy = self.scale_value(self.y, self.minpsn, self.maxpsn, self.mindmx,self.maxdmx)
