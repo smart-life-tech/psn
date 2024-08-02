@@ -28,6 +28,20 @@
             "sacn_addr": 0
         },
         {
+            "type": "sacn",
+            "psn_source": "psn source",
+            "server_name": "server name",
+            "tracker_id": 9,
+            "tracker_name": "tracker name",
+            "axis": "Z",
+            "psn_min": 6.0,
+            "psn_max": 6.0,
+            "dmx_min": 66,
+            "dmx_max": 66,
+            "sacn_universe": 68,
+            "sacn_addr": 10
+        },
+        {
             "type": "osc",
             "psn_source": "psn source",
             "server_name": "server name",

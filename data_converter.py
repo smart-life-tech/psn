@@ -1,12 +1,33 @@
 import json
 import sacn
-import pypsn
+import os
 from pythonosc.udp_client import SimpleUDPClient
 from pythonosc import udp_client
 sender = sacn.sACNsender()  # provide an IP-Address to bind to if you want to send multicast packets from a specific interface
 sender.start()  # start the sending thread
 sender.activate_output(1)  # start sending out data in the 1st universe
 sender[1].multicast = True  # set multicast to True
+
+CONFIG_FILE = 'config.json'
+def load_config():
+    if os.path.exists(CONFIG_FILE):
+        with open(CONFIG_FILE, 'r') as f:
+            return json.load(f)
+    return {
+        'psn_ip': '0.0.0.0',
+        'psn_port': 56565,
+        'psn_multicast_ip': '236.10.10.10',
+        'mappings': []
+    }
+config = load_config()
+def get_sacn_mappings(config):
+    sacn_mappings = {}
+    for mapping in config['mappings']:
+        if mapping['type'] == 'sacn':
+            sacn_mappings[mapping['axis']] = mapping['sacn_addr']
+    return sacn_mappings
+
+ 
 class DataConverter:
     def __init__(self, config_file):
         self.config_file = config_file
@@ -60,7 +81,7 @@ class DataConverter:
                     mapping.get('osc_max', None),
                     mapping.get('osc_addr', None),
                 )
-
+                      
     def add_osc_mapping(self, type ,psn_source, server_name, tracker_id, tracker_name, axis, psn_min, psn_max, osc_min=None, osc_max=None, osc_addr=None):
         mapping = {
             'type': type,
@@ -143,10 +164,10 @@ class DataConverter:
                             elif mapping['axis'] == 'Y':
                                 self.activatey=1
                             elif mapping['axis'] == 'Z':
-                                    self.activatez=1
+                                self.activatez=1
                                     
                             #scaled_value = self.scale_value(axis_value, mapping['psn_min'], mapping['psn_max'], mapping['dmx_min'], mapping['dmx_max'])
-                            self.send_dmx(mapping['sacn_universe'], mapping['sacn_addr'], mapping['axis'])
+                            self.send_dmx(mapping['sacn_universe'], get_sacn_mappings(config), mapping['axis'])
                     else:
                         print(f"Field   not found in data: {data}")
                 else:
@@ -197,8 +218,21 @@ class DataConverter:
             else :
                 outputz = 0
             print("after mapping output x",outputx)
+            sacn_mappings=address
+            output_data = {}
+            if 'X' in sacn_mappings:
+                output_data[sacn_mappings['X']] = int(outputx)
+            if 'Y' in sacn_mappings:
+                output_data[sacn_mappings['Y']] = int(outputy)
+            if 'Z' in sacn_mappings:
+                output_data[sacn_mappings['Z']] = int(outputz)
+            
+            for addr, value in output_data.items():
+                sender[universe].dmx_data[addr] = value
+                print(f"Sending data to sACN address {addr}: {value}")
+            coordinate_tuple = (int(outputx), int(outputy), int(outputz))
             # i need to use address to sort this out
-            sender[universe].dmx_data = (int(outputx),int(outputy),int(outputz))
+            sender[universe].dmx_data = coordinate_tuple
             # if value == 'Y':
             #     outputy = self.scale_value(self.y, self.minpsn, self.maxpsn, self.mindmx,self.maxdmx)
             #     #sender[universe].dmx_data = (0,int(outputy),)
