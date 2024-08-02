@@ -75,7 +75,7 @@ def fill_dmx(psn_data):
             # print("status :" ,status)
             # print("timestamp :" ,timestamp)
             # print("trgpos :" ,trgpos)
-            #sender[1].dmx_data = dmx_data
+            sender[1].dmx_data = dmx_data
     except Exception as e:
         print("error",e)
         pass
