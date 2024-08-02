@@ -235,7 +235,7 @@ class DataConverter:
             
             coordinate_tuple = (int(outputx), int(outputy), int(outputz))
             # i need to use address to sort this out
-            sender[universe].dmx_data = coordinate_tuple
+            #sender[universe].dmx_data = coordinate_tuple
             # if value == 'Y':
             #     outputy = self.scale_value(self.y, self.minpsn, self.maxpsn, self.mindmx,self.maxdmx)
             #     #sender[universe].dmx_data = (0,int(outputy),)
