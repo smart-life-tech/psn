@@ -229,9 +229,10 @@ class DataConverter:
                     output_data[sacn_addr] = int (outputz)
             
             coordinate_tuple = tuple(output_data.get(addr, 0) for addr in sorted(sacn_mappings.values()))
+            print(f"Sending data  : {coordinate_tuple}")
             sender[universe].dmx_data = coordinate_tuple
             print(f"Sending data to sACN addresses: {output_data}")
-            print(f"Sending data  : {coordinate_tuple}")
+            
             coordinate_tuple = (int(outputx), int(outputy), int(outputz))
             # i need to use address to sort this out
             sender[universe].dmx_data = coordinate_tuple
