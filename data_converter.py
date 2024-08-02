@@ -220,16 +220,18 @@ class DataConverter:
             print("after mapping output x",outputx)
             sacn_mappings=address
             output_data = {}
-            if 'X' in sacn_mappings:
-                output_data[sacn_mappings['X']] = int(outputx)
-            if 'Y' in sacn_mappings:
-                output_data[sacn_mappings['Y']] = int(outputy)
-            if 'Z' in sacn_mappings:
-                output_data[sacn_mappings['Z']] = int(outputz)
+            for axis, sacn_addr in sacn_mappings.items():
+                if axis == 'X':
+                    output_data[sacn_addr] = int (outputx)
+                elif axis == 'Y':
+                    output_data[sacn_addr] = int (outputy)
+                elif axis == 'Z':
+                    output_data[sacn_addr] = int (outputz)
             
-            for addr, value in output_data.items():
-                sender[universe].dmx_data[addr] = value
-                print(f"Sending data to sACN address {addr}: {value}")
+            coordinate_tuple = tuple(output_data.get(addr, 0) for addr in sorted(sacn_mappings.values()))
+            sender[universe].dmx_data = coordinate_tuple
+            print(f"Sending data to sACN addresses: {output_data}")
+            print(f"Sending data  : {coordinate_tuple}")
             coordinate_tuple = (int(outputx), int(outputy), int(outputz))
             # i need to use address to sort this out
             sender[universe].dmx_data = coordinate_tuple
