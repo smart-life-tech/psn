@@ -88,15 +88,19 @@ class PSNReceiver:
                 print("z position data2====== : ", position2.z)
                 toggle=True
                 # print("x postion data====== : ",position2.x)
-            # if position3.z > 0:
-            #     dmx_data[2] = 512 - int(abs(position.z))
-            #     #print(position.z)
-            #     self.z = position3.z
-            # print("postion : ",position)
-            # print("speed :" ,speed)
-            # print("status :" ,status)
-            # print("timestamp :" ,timestamp)
-            # print("trgpos :" ,trgpos)
+            position3 = psn_data.trackers[2].pos
+            if position3.z >= 0:
+                dmx_data[2] = 512 - int(abs(position.z))
+                print(position3.z)
+                print("x position data3====== : ", position3.x)
+                print("y position data3====== : ", position3.y)
+                print("z position data3====== : ", position3.z)
+                self.z = position3.z
+                print("postion : ",position)
+                print("speed :" ,speed)
+                print("status :" ,status)
+                print("timestamp :" ,timestamp)
+                print("trgpos :" ,trgpos)
             # sender[1].dmx_data = dmx_data
         # except Exception as e:
         #     print(e)
