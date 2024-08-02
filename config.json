@@ -7,10 +7,10 @@
             "tracker_id": 8,
             "tracker_name": "tracker name",
             "axis": "Y",
-            "psn_min": 8.0,
+            "psn_min": 0.0,
             "psn_max": 8.0,
-            "osc_min": 88.0,
-            "osc_max": 8.0,
+            "osc_min": 8.0,
+            "osc_max": 88.0,
             "osc_addr": "192.168.0.202"
         },
         {
@@ -21,9 +21,9 @@
             "tracker_name": "tracker name",
             "axis": "Z",
             "psn_min": 6.0,
-            "psn_max": 6.0,
+            "psn_max": 86.0,
             "dmx_min": 66,
-            "dmx_max": 66,
+            "dmx_max": 444,
             "sacn_universe": 68,
             "sacn_addr": 0
         },
@@ -35,9 +35,9 @@
             "tracker_name": "tracker name",
             "axis": "Z",
             "psn_min": 6.0,
-            "psn_max": 6.0,
+            "psn_max": 67.0,
             "dmx_min": 66,
-            "dmx_max": 66,
+            "dmx_max": 466,
             "sacn_universe": 68,
             "sacn_addr": 10
         },
@@ -49,9 +49,9 @@
             "tracker_name": "tracker name",
             "axis": "Y",
             "psn_min": 8.0,
-            "psn_max": 8.0,
-            "osc_min": 88.0,
-            "osc_max": 8.0,
+            "psn_max": 87.0,
+            "osc_min": 8.0,
+            "osc_max": 456.0,
             "osc_addr": "192.168.0.202"
         }
     ],
